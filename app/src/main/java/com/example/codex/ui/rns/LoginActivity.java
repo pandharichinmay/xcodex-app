@@ -18,10 +18,25 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.codex.R;
+import com.example.codex.model.bo.UserMaster;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.accounts.AccountManager.KEY_PASSWORD;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String REGISTER_URL = "http://192.168.1.25:8080/loginUser";
     private LoginViewModel loginViewModel;
 
     @Override
@@ -107,8 +122,45 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                //loginViewModel.login(usernameEditText.getText().toString(),
+                //passwordEditText.getText().toString());
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(LoginActivity.this, "Login Successful..!", Toast.LENGTH_LONG).show();                                System.out.println("Error Message..");
+                                System.out.println("Login Successful");
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                                System.out.println("Error Message.."+error);
+                            }
+                        }) {
+//                    @Override
+//                    protected Map<String, String> getParams() {
+//                        Map<String, String> params = new HashMap<String, String>();
+//                        params.put("username", usernameEditText.getText().toString());
+//                        params.put("password", passwordEditText.getText().toString());
+//                        return params;
+//
+//                    }
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        UserMaster userMaster = new UserMaster();
+                        userMaster.setEmail(usernameEditText.getText().toString());
+                        userMaster.setPassword(passwordEditText.getText().toString());
+                        String str = new Gson().toJson(userMaster);
+                        return str.getBytes();
+                    }
+                };
+
+                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+                queue.add(stringRequest);
             }
         });
     }
