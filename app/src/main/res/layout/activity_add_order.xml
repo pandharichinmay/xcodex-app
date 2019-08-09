@@ -171,7 +171,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/spinner"
+
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.789"
@@ -306,14 +306,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <EditText
-                    android:id="@+id/editAssignTo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    tools:layout_editor_absoluteX="174dp"
-                    tools:layout_editor_absoluteY="591dp" />
             </TableRow>
 
             <TableRow>
