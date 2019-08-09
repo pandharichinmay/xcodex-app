@@ -3,6 +3,7 @@ package com.example.codex.ui.rns;
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -25,26 +26,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.codex.AddOrder;
 import com.example.codex.R;
 import com.example.codex.model.bo.UserMaster;
+import com.example.codex.util.Utility;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.accounts.AccountManager.KEY_PASSWORD;
-
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String REGISTER_URL = "http://192.168.1.25:8080/loginUser";
     private LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
+        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
         final EditText usernameEditText = findViewById(R.id.email);
         final EditText passwordEditText = findViewById(R.id.password);
@@ -100,8 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.loginDataChanged(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
@@ -111,8 +109,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                    loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 }
                 return false;
             }
@@ -124,22 +121,35 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 //loginViewModel.login(usernameEditText.getText().toString(),
                 //passwordEditText.getText().toString());
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(LoginActivity.this, "Login Successful..!", Toast.LENGTH_LONG).show();                                System.out.println("Error Message..");
-                                System.out.println("Login Successful");
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.HOST_URL + "loginUser", new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        loadingProgressBar.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, "Login Successful..!", Toast.LENGTH_LONG).show();
+                        UserMaster user = Utility.fromJson(response, UserMaster.class, null);
+                        System.out.println("Login Successful ==>" + user.getUsername());
 
+                        startActivity(new Intent(LoginActivity.this, AddOrder.class));
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+                            loadingProgressBar.setVisibility(View.GONE);
+                            System.out.println("Error Message.." + error.networkResponse.statusCode);
+                            if (error.networkResponse.statusCode == 404) {
+                                Toast.makeText(LoginActivity.this, "Invalid Login credentials!", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Some error occurred on the server .. ", Toast.LENGTH_LONG).show();
                             }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                                System.out.println("Error Message.."+error);
-                            }
-                        }) {
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Some error occurred on the server .. ", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }) {
 //                    @Override
 //                    protected Map<String, String> getParams() {
 //                        Map<String, String> params = new HashMap<String, String>();
@@ -148,6 +158,13 @@ public class LoginActivity extends AppCompatActivity {
 //                        return params;
 //
 //                    }
+
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("Content-Type", "application/json");
+                        return params;
+                    }
 
                     @Override
                     public byte[] getBody() throws AuthFailureError {

@@ -2,8 +2,8 @@ package com.example.codex;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -16,17 +16,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.codex.model.bo.CustomerMaster;
+import com.example.codex.util.Utility;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.R.layout.simple_spinner_item;
 
 public class AddOrder extends AppCompatActivity {
-    private String URLstring = "http://192.168.1.25:8080/getAllCustomer";
     private static ProgressDialog mProgressDialog;
     private ArrayList<CustomerMaster> goodModelArrayList;
     private ArrayList<String> names = new ArrayList<String>();
@@ -43,61 +42,50 @@ public class AddOrder extends AppCompatActivity {
     }
 
     private void retrieveJSON() {
-        showSimpleProgressDialog(this, "Loading...", "Fetching Json", false);
+        //showSimpleProgressDialog(this, "Loading...", "Fetching Json", false);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLstring,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getAllCustomer", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
-                        Log.d("strrrrr", ">>" + response);
+                try {
+                    removeSimpleProgressDialog();
+                    Log.d("strrrrr", ">>" + response);
 
-                        try {
+                    Type listType = new TypeToken<ArrayList<CustomerMaster>>(){}.getType();
 
-                            JSONObject obj = new JSONObject(response);
-                            if (obj.optString("status").equals("true")) {
-
-                                goodModelArrayList = new ArrayList<>();
-                                JSONArray dataArray = obj.getJSONArray("data");
-
-                                for (int i = 0; i < dataArray.length(); i++) {
-
-                                    CustomerMaster playerModel = new CustomerMaster();
-                                    JSONObject dataobj = dataArray.getJSONObject(i);
-
-                                    playerModel.setCustName(dataobj.getString("name"));
-                                    goodModelArrayList.add(playerModel);
-
-                                }
-
-                                for (int i = 0; i < goodModelArrayList.size(); i++) {
-                                    names.add(goodModelArrayList.get(i).getCustName().toString());
-                                }
-
-                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
-                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-                                spinner.setAdapter(spinnerArrayAdapter);
-                                removeSimpleProgressDialog();
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    List<CustomerMaster> customers = Utility.fromJson(response, null, listType);
+                    if (customers != null && customers.size() > 0) {
+                        List<String> names = new ArrayList<>();
+                        for(CustomerMaster cust: customers) {
+                            names.add(cust.getCustName());
                         }
+                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
+                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                        spinner.setAdapter(spinnerArrayAdapter);
+
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //displaying the error in toast if occurrs
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, standardErrorListener());
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         requestQueue.add(stringRequest);
+    }
+
+    private Response.ErrorListener standardErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //displaying the error in toast if occurrs
+                Toast.makeText(getApplicationContext(), "Error occurred on the server ..", Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
     public static void removeSimpleProgressDialog() {
@@ -118,8 +106,7 @@ public class AddOrder extends AppCompatActivity {
         }
     }
 
-    private void showSimpleProgressDialog(Context context, String title,
-                                          String msg, boolean isCancelable) {
+    private void showSimpleProgressDialog(Context context, String title, String msg, boolean isCancelable) {
         try {
             if (mProgressDialog == null) {
                 mProgressDialog = ProgressDialog.show(context, title, msg);
