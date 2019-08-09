@@ -37,6 +37,7 @@ public class FragmentFileUpload extends Fragment {
         messageText.setText("Uploading file path :- '/mnt/sdcard/" + uploadFileName + "'");
 
         /************* Php script path ****************/
+
         upLoadServerUri = "http://www.androidexample.com/media/UploadToServer.php";
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
