@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.codex.model.bo.CustomerMaster;
+import com.example.codex.model.bo.OrderStatusMaster;
 import com.example.codex.util.Utility;
 import com.google.gson.reflect.TypeToken;
 
@@ -29,19 +30,75 @@ public class AddOrder extends AppCompatActivity {
     private static ProgressDialog mProgressDialog;
     private ArrayList<CustomerMaster> goodModelArrayList;
     private ArrayList<String> names = new ArrayList<String>();
-    private Spinner spinner;
+    private Spinner customerSpinner;
+    private Spinner departmentSpinner;
+    private Spinner typeSpinner;
+    private Spinner categorySpinner;
+    private Spinner productSpinner;
+    private Spinner assignToSpinner;
+    private Spinner prioritySpinner;
+    private Spinner statusSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_order);
-        spinner = findViewById(R.id.spinnerCustomer);
+        customerSpinner = findViewById(R.id.spinnerCustomer);
+        departmentSpinner = findViewById(R.id.spinnerDepartment);
+        typeSpinner = findViewById(R.id.spinnerType);
+        categorySpinner = findViewById(R.id.spinnerCategory);
+        productSpinner = findViewById(R.id.spinnerProduct);
+        assignToSpinner = findViewById(R.id.spinnerAssignTo);
+        prioritySpinner = findViewById(R.id.spinnerPriority);
+        statusSpinner = findViewById(R.id.spinnerStatus);
 
-        retrieveJSON();
-
+        fetchCustomer();
+//        fetchDepartment();
+//        fetchType();
+//        fetchCategory();
+//        fetchProduct();
+//        fetchAssignTo();
+//        fetchPriority();
+        fetchStatus();
     }
 
-    private void retrieveJSON() {
+    private void fetchStatus() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getAllStatus", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    removeSimpleProgressDialog();
+                    Log.d("strrrrr", ">>" + response);
+
+                    Type listType = new TypeToken<ArrayList<OrderStatusMaster>>() {
+                    }.getType();
+
+                    List<OrderStatusMaster> customers = Utility.fromJson(response, null, listType);
+                    if (customers != null && customers.size() > 0) {
+                        List<String> names = new ArrayList<>();
+                        for (OrderStatusMaster cust : customers) {
+                            names.add(cust.getStatus());
+                        }
+                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
+                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                        departmentSpinner.setAdapter(spinnerArrayAdapter);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, standardErrorListener());
+
+        // request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        requestQueue.add(stringRequest);
+    }
+
+    private void fetchCustomer() {
         //showSimpleProgressDialog(this, "Loading...", "Fetching Json", false);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getAllCustomer", new Response.Listener<String>() {
@@ -52,17 +109,18 @@ public class AddOrder extends AppCompatActivity {
                     removeSimpleProgressDialog();
                     Log.d("strrrrr", ">>" + response);
 
-                    Type listType = new TypeToken<ArrayList<CustomerMaster>>(){}.getType();
+                    Type listType = new TypeToken<ArrayList<CustomerMaster>>() {
+                    }.getType();
 
                     List<CustomerMaster> customers = Utility.fromJson(response, null, listType);
                     if (customers != null && customers.size() > 0) {
                         List<String> names = new ArrayList<>();
-                        for(CustomerMaster cust: customers) {
+                        for (CustomerMaster cust : customers) {
                             names.add(cust.getCustName());
                         }
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-                        spinner.setAdapter(spinnerArrayAdapter);
+                        customerSpinner.setAdapter(spinnerArrayAdapter);
 
                     }
 

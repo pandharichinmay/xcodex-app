@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 
 public class Utility {
 
-    public static final String HOST_URL = "http://192.168.0.103:8080/";
+    public static final String HOST_URL = "http://192.168.1.25:8080/";
 
 
     public static <T> T fromJson(String response, Class<T> cls, Type token) {

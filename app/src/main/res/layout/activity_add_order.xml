@@ -120,7 +120,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txtAddorder" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinnerType"
             android:layout_width="251dp"
             android:layout_height="31dp"
             android:layout_marginStart="8dp"
@@ -131,10 +131,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.883"
             app:layout_constraintStart_toEndOf="@+id/txtType"
-            app:layout_constraintTop_toBottomOf="@+id/spinner3" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerDepartment" />
 
         <Spinner
-            android:id="@+id/spinner4"
+            android:id="@+id/spinnerCategory"
             android:layout_width="251dp"
             android:layout_height="31dp"
             android:layout_marginStart="8dp"
@@ -145,10 +145,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.836"
             app:layout_constraintStart_toEndOf="@+id/txtCategory"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerType" />
 
         <Spinner
-            android:id="@+id/spinner3"
+            android:id="@+id/spinnerDepartment"
             android:layout_width="251dp"
             android:layout_height="31dp"
             android:layout_marginStart="8dp"
@@ -204,11 +204,10 @@
                     tools:layout_editor_absoluteY="532dp" />
 
                 <Spinner
-                    android:id="@+id/spinner5"
-                    android:layout_width="213dp"
-                    android:layout_height="27dp"
-                    tools:layout_editor_absoluteX="170dp"
-                    tools:layout_editor_absoluteY="551dp" />
+                    android:id="@+id/spinnerProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </TableRow>
 
             <TableRow>
@@ -302,6 +301,11 @@
                     tools:layout_editor_absoluteX="28dp"
                     tools:layout_editor_absoluteY="603dp" />
 
+                <Spinner
+                    android:id="@+id/spinnerAssignTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <EditText
                     android:id="@+id/editAssignTo"
                     android:layout_width="wrap_content"
@@ -323,11 +327,10 @@
                     tools:layout_editor_absoluteY="532dp" />
 
                 <Spinner
-                    android:id="@+id/spinner5"
-                    android:layout_width="213dp"
-                    android:layout_height="27dp"
-                    tools:layout_editor_absoluteX="170dp"
-                    tools:layout_editor_absoluteY="551dp" />
+                    android:id="@+id/spinnerPriority"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </TableRow>
 
             <TableRow>
@@ -341,7 +344,7 @@
                     tools:layout_editor_absoluteY="532dp" />
 
                 <Spinner
-                    android:id="@+id/spinner5"
+                    android:id="@+id/spinnerStatus"
                     android:layout_width="213dp"
                     android:layout_height="27dp"
                     tools:layout_editor_absoluteX="170dp"
