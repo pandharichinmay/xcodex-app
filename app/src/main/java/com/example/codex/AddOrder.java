@@ -71,7 +71,7 @@ public class AddOrder extends AppCompatActivity {
 
     private void fetchAssignTo() {
         System.out.println("In Assign to");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "http://192.168.1.25:8080/getAllUsers", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getAllUsers", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.println("In Responce" +response);

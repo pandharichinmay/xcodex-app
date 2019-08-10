@@ -30,51 +30,51 @@
 
         <TextView
             android:id="@+id/txtOrder"
-            android:layout_width="78dp"
-            android:layout_height="34dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="36dp"
             android:text="Order *"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/order"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAddorder" />
+            app:layout_constraintTop_toTopOf="@+id/order" />
 
         <TextView
             android:id="@+id/txtcustomer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:text="Customer *"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerCustomer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtOrder" />
+            app:layout_constraintTop_toTopOf="@+id/spinnerCustomer" />
 
         <TextView
             android:id="@+id/txtDept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:text="Department"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerDepartment"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtcustomer" />
+            app:layout_constraintTop_toTopOf="@+id/spinnerDepartment" />
 
         <TextView
             android:id="@+id/txtType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:text="Type "
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerType"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtDept" />
+            app:layout_constraintTop_toTopOf="@+id/spinnerType" />
 
         <TextView
             android:id="@+id/txtCategory"
@@ -82,52 +82,48 @@
             android:layout_height="34dp"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="44dp"
             android:text="Category *"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerCategory"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtType" />
+            app:layout_constraintTop_toTopOf="@+id/spinnerCategory" />
 
         <TextView
             android:id="@+id/txtProduct"
-            android:layout_width="77dp"
-            android:layout_height="29dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:text="Product"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtCategory" />
 
         <EditText
             android:id="@+id/order"
-            android:layout_width="250dp"
-            android:layout_height="33dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
             android:ems="10"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.84"
             app:layout_constraintStart_toEndOf="@+id/txtOrder"
             app:layout_constraintTop_toBottomOf="@+id/txtAddorder" />
 
         <Spinner
             android:id="@+id/spinnerType"
-            android:layout_width="251dp"
-            android:layout_height="31dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="36dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.883"
             app:layout_constraintStart_toEndOf="@+id/txtType"
@@ -135,13 +131,13 @@
 
         <Spinner
             android:id="@+id/spinnerCategory"
-            android:layout_width="251dp"
-            android:layout_height="31dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="36dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.836"
             app:layout_constraintStart_toEndOf="@+id/txtCategory"
@@ -149,14 +145,14 @@
 
         <Spinner
             android:id="@+id/spinnerDepartment"
-            android:layout_width="251dp"
-            android:layout_height="31dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="28dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="24dp"
 
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.769"
             app:layout_constraintStart_toEndOf="@+id/txtDept"
@@ -164,14 +160,15 @@
 
         <Spinner
             android:id="@+id/spinnerCustomer"
-            android:layout_width="251dp"
-            android:layout_height="31dp"
+            style="@android:style/Widget.Material.Spinner.Underlined"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
 
+            android:layout_marginRight="24dp"
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.789"
@@ -180,13 +177,13 @@
 
         <TableLayout
             android:id="@+id/tableLayout"
-            android:layout_width="273dp"
-            android:layout_height="85dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toTopOf="@+id/txtAddProduct"
             app:layout_constraintEnd_toEndOf="parent"
@@ -246,26 +243,23 @@
             android:id="@+id/txtAddProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:text="+ Add Product"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
         <TableLayout
             android:id="@+id/tableLayout2"
-            android:layout_width="285dp"
-            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtAddProduct">
@@ -350,13 +344,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="72dp"
             android:layout_marginLeft="72dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="Cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/create"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout2"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="@+id/create" />
 
         <Button
             android:id="@+id/create"
@@ -365,8 +357,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="72dp"
+            android:layout_marginRight="72dp"
             android:layout_marginBottom="8dp"
             android:text="Create"
             app:layout_constraintBottom_toBottomOf="parent"
