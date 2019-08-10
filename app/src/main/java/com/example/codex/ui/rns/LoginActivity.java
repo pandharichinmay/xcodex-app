@@ -26,8 +26,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.codex.AddOrder;
 import com.example.codex.R;
+import com.example.codex.UserDrawer;
 import com.example.codex.model.bo.UserMaster;
 import com.example.codex.util.Utility;
 import com.google.gson.Gson;
@@ -128,8 +128,8 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Login Successful..!", Toast.LENGTH_LONG).show();
                         UserMaster user = Utility.fromJson(response, UserMaster.class, null);
                         System.out.println("Login Successful ==>" + user.getUsername());
-
-                        startActivity(new Intent(LoginActivity.this, AddOrder.class));
+                        Utility.saveToSharedPref(LoginActivity.this, "user", user);
+                        startActivity(new Intent(LoginActivity.this, UserDrawer.class));
 
                     }
                 }, new Response.ErrorListener() {

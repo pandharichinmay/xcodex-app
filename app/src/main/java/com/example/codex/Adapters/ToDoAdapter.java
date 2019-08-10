@@ -5,24 +5,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.codex.R;
-import com.example.codex.model.Todolist;
+import com.example.codex.model.bo.OrderMaster;
+import com.example.codex.util.Utility;
 
 import java.util.List;
 
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder> {
 
-    private List<Todolist> list;
+    private List<OrderMaster> list;
     private Activity context;
 
-    public ToDoAdapter(List<Todolist> list, Activity context) {
+    public ToDoAdapter(List<OrderMaster> list, Activity context) {
         this.list = list;
         this.context = context;
     }
 
-    public void setList(List<Todolist> list) {
+    public void setList(List<OrderMaster> list) {
         this.list = list;
     }
 
@@ -34,17 +37,17 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
 
     @Override
     public void onBindViewHolder(RecViewHolder holder, final int position) {
-        final Todolist movie = list.get(position);
+        final OrderMaster order = list.get(position);
 
-        holder.bind(movie);
+        holder.bind(order);
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-//                movie.getUser().setCurrentBusiness(currentUser.getCurrentBusiness());
-//                context.startActivity(Utility.nextIntent(context, GenericCustomerProfileActivity.class, true, movie.getUser(), Utility.CUSTOMER_KEY));
+//                order.getUser().setCurrentBusiness(currentUser.getCurrentBusiness());
+//                context.startActivity(Utility.nextIntent(context, GenericCustomerProfileActivity.class, true, order.getUser(), Utility.CUSTOMER_KEY));
 
             }
         });
@@ -57,29 +60,42 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
 
     public class RecViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtpriorityStatus,txtcategoryStatus;
-//        private TextView txtAddress, txtViewprofile;
-//        private TextView year;
-//        private View subItem;
+        private TextView txtpriorityStatus, txtcategoryStatus;
+        private TextView orderTitle, dueDate;
+        private Button status;
+        private ImageView editButton;
 
         public RecViewHolder(View itemView) {
             super(itemView);
-            txtpriorityStatus = (TextView) itemView.findViewById(R.id.txtpriorityStatus);
-            txtcategoryStatus = (TextView) itemView.findViewById(R.id.txtcategoryStatus);
-
-
+            txtpriorityStatus = (TextView) itemView.findViewById(R.id.txtOrderPriority);
+            txtcategoryStatus = (TextView) itemView.findViewById(R.id.txtOrderCategory);
+            orderTitle = (TextView) itemView.findViewById(R.id.txtOrderTitle);
+            dueDate = (TextView) itemView.findViewById(R.id.txtDueDate);
+            status = (Button) itemView.findViewById(R.id.btnOrderStatus);
+            editButton = (ImageView) itemView.findViewById(R.id.btnEditOrder);
         }
 
-        private void bind(final Todolist todo) {
-            txtpriorityStatus.setText(todo.getName());
-            txtcategoryStatus.setText(todo.getName());
+        private void bind(final OrderMaster todo) {
+
+            if (todo.getPriority_id() != null) {
+                txtpriorityStatus.setText(todo.getPriority_id().getPriority());
+            }
+            if (todo.getCategory_id() != null) {
+                txtcategoryStatus.setText(todo.getCategory_id().getCategory());
+            }
+
+            orderTitle.setText(todo.getTitle());
+            dueDate.setText(Utility.convertDate(todo.getDue_date(), Utility.DATE_FORMAT));
+            if (todo.getStatus_id() != null) {
+                status.setText(todo.getStatus_id().getStatus());
+            }
 
         }
 
     }
 
 
-    public void updateCustomerList(List<Todolist> todo) {
+    public void updateCustomerList(List<OrderMaster> todo) {
         //setUsers(customers);
         this.list = todo;
         notifyDataSetChanged();

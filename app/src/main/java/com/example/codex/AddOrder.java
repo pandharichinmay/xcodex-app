@@ -7,12 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.codex.model.bo.CategoryMaster;
@@ -100,7 +98,7 @@ public class AddOrder extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, standardErrorListener());
+        }, Utility.standardErrorListener(this));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -135,7 +133,7 @@ public class AddOrder extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, standardErrorListener());
+        }, Utility.standardErrorListener(this));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -171,7 +169,7 @@ public class AddOrder extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, standardErrorListener());
+        }, Utility.standardErrorListener(this));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -207,7 +205,7 @@ public class AddOrder extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, standardErrorListener());
+        }, Utility.standardErrorListener(this));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -243,7 +241,7 @@ public class AddOrder extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, standardErrorListener());
+        }, Utility.standardErrorListener(this));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -280,7 +278,7 @@ public class AddOrder extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, standardErrorListener());
+        }, Utility.standardErrorListener(this));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -316,7 +314,7 @@ public class AddOrder extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, standardErrorListener());
+        }, Utility.standardErrorListener(this));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -354,7 +352,7 @@ public class AddOrder extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, standardErrorListener());
+        }, Utility.standardErrorListener(this));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -362,16 +360,6 @@ public class AddOrder extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private Response.ErrorListener standardErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //displaying the error in toast if occurrs
-                System.out.println("In Error Listener" + error);
-                Toast.makeText(getApplicationContext(), "Error occurred on the server ..", Toast.LENGTH_SHORT).show();
-            }
-        };
-    }
 
     public static void removeSimpleProgressDialog() {
         try {

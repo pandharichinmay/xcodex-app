@@ -1,21 +1,39 @@
 package com.example.codex;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.codex.Adapters.ToDoAdapter;
+import com.example.codex.model.bo.OrderMaster;
+import com.example.codex.model.bo.UserMaster;
+import com.example.codex.util.Utility;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RecyclerView assignedOrders;
+    private ToDoAdapter adapter;
+    private UserMaster currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +56,50 @@ public class UserDrawer extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
+
+        assignedOrders = drawer.findViewById(R.id.assigned_orders);
+        assignedOrders.setLayoutManager(new LinearLayoutManager(this));
+
+        loadAssignedOrders();
+
+
+
+
+    }
+
+    private void loadAssignedOrders() {
+        Long assignedTo = currentUser.getIdUser();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrdersbyAssignTo/" + assignedTo, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    //removeSimpleProgressDialog();
+                    Log.d("response", ">>" + response);
+
+                    Type listType = new TypeToken<ArrayList<OrderMaster>>() {}.getType();
+
+                    List<OrderMaster> orders = Utility.fromJson(response, null, listType);
+                    if (orders != null && orders.size() > 0) {
+
+                        adapter = new ToDoAdapter(orders, UserDrawer.this);
+                        //recyclerView.setHasFixedSize(true);
+                        //recyclerView.setItemViewCacheSize(50);
+                        assignedOrders.setAdapter(adapter);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, Utility.standardErrorListener(this));
+
+        // request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        requestQueue.add(stringRequest);
     }
 
     @Override
