@@ -225,7 +225,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txtpriorityStatus"
+                android:id="@+id/txtOrderPriority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -252,10 +252,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.493"
                 app:layout_constraintStart_toEndOf="@+id/txtDepartment"
-                app:layout_constraintTop_toBottomOf="@+id/txtpriorityStatus" />
+                app:layout_constraintTop_toBottomOf="@+id/txtOrderPriority" />
 
             <TextView
-                android:id="@+id/txtcategoryStatus"
+                android:id="@+id/txtOrderCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -282,7 +282,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.53"
                 app:layout_constraintStart_toEndOf="@+id/txtSubmitter"
-                app:layout_constraintTop_toBottomOf="@+id/txtcategoryStatus" />
+                app:layout_constraintTop_toBottomOf="@+id/txtOrderCategory" />
 
             <TextView
                 android:id="@+id/txtDate"
