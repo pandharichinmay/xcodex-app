@@ -92,7 +92,7 @@ public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.Re
         public RecViewHolder(View itemView) {
             super(itemView);
             productTitle = (TextView) itemView.findViewById(R.id.txtProductTitle);
-            quantity = (TextView) itemView.findViewById(R.id.txtProductQuantity);
+            quantity = (TextView) itemView.findViewById(R.id.txtPriorityValue);
             removeProduct = (ImageView) itemView.findViewById(R.id.btnRemoveProduct);
 
         }

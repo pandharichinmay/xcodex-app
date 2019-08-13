@@ -85,7 +85,7 @@ public class AddOrder extends AppCompatActivity {
 
         String orderJson = getIntent().getStringExtra(Utility.ORDER_KEY);
         currentOrder = Utility.fromJson(orderJson, OrderMaster.class, null);
-        
+
 
         customerSpinner = findViewById(R.id.spinnerCustomer);
         departmentSpinner = findViewById(R.id.spinnerDepartment);
