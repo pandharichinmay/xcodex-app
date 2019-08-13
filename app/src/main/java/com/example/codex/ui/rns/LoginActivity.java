@@ -43,6 +43,15 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        UserMaster currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
+
+        if (currentUser != null && currentUser.getUsername() != null) {
+            //redirect to homepage as already logged in user
+            startActivity(new Intent(LoginActivity.this, UserDrawer.class));
+            finishActivity(0);
+        }
+
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
         final EditText usernameEditText = findViewById(R.id.email);

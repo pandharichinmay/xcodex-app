@@ -95,10 +95,10 @@
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
-            android:text="Product"
-            android:textSize="12sp"
+            android:text="Add products"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtCategory" />
+            app:layout_constraintTop_toBottomOf="@+id/txtCategory"/>
 
         <EditText
             android:id="@+id/order"
@@ -175,69 +175,62 @@
             app:layout_constraintStart_toEndOf="@+id/txtcustomer"
             app:layout_constraintTop_toBottomOf="@+id/order" />
 
-        <TableLayout
-            android:id="@+id/tableLayout"
+
+        <TextView
+            android:id="@+id/txtproductin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="24dp"
-            app:layout_constraintBottom_toTopOf="@+id/txtAddProduct"
+            android:layout_marginTop="16dp"
+            android:text="Product"
+            app:layout_constraintStart_toStartOf="@+id/txtProduct"
+            app:layout_constraintTop_toBottomOf="@id/txtProduct"/>
+
+        <Spinner
+            android:id="@+id/spinnerProduct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txtproductin"
+            app:layout_constraintTop_toTopOf="@+id/txtproductin"/>
+
+
+        <TextView
+            android:id="@+id/txtQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Quantity"
+            app:layout_constraintStart_toStartOf="@+id/txtproductin"
+            app:layout_constraintTop_toBottomOf="@+id/txtproductin"/>
+
+        <EditText
+            android:id="@+id/productQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@+id/txtQuantity"
+            app:layout_constraintTop_toTopOf="@+id/txtQuantity"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerProducts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtProduct">
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/txtproductin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Product"
-                    tools:layout_editor_absoluteX="28dp"
-                    tools:layout_editor_absoluteY="532dp" />
-
-                <Spinner
-                    android:id="@+id/spinnerProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/txtQuantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quantity"
-                    tools:layout_editor_absoluteX="28dp"
-                    tools:layout_editor_absoluteY="603dp" />
-
-                <EditText
-                    android:id="@+id/editText2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    tools:layout_editor_absoluteX="174dp"
-                    tools:layout_editor_absoluteY="591dp" />
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/txtRemove"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="-Remove"
-                    tools:layout_editor_absoluteX="28dp"
-                    tools:layout_editor_absoluteY="603dp" />
-            </TableRow>
-        </TableLayout>
+            app:layout_constraintTop_toBottomOf="@+id/txtAddProduct"></android.support.v7.widget.RecyclerView>
 
         <TextView
             android:id="@+id/txtAddProduct"
@@ -245,11 +238,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="+ Add Product"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/txtQuantity"/>
 
         <TableLayout
             android:id="@+id/tableLayout2"
@@ -257,12 +250,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAddProduct">
+            app:layout_constraintTop_toBottomOf="@+id/recyclerProducts">
 
             <TableRow>
 
@@ -272,7 +265,7 @@
                     android:layout_height="wrap_content"
                     android:text="Submitter *"
                     tools:layout_editor_absoluteX="28dp"
-                    tools:layout_editor_absoluteY="603dp" />
+                    tools:layout_editor_absoluteY="603dp"/>
 
                 <EditText
                     android:id="@+id/editadmin"
@@ -281,7 +274,7 @@
                     android:ems="10"
                     android:inputType="textPersonName"
                     tools:layout_editor_absoluteX="174dp"
-                    tools:layout_editor_absoluteY="591dp" />
+                    tools:layout_editor_absoluteY="591dp"/>
 
             </TableRow>
 
@@ -293,12 +286,12 @@
                     android:layout_height="wrap_content"
                     android:text="Assign To "
                     tools:layout_editor_absoluteX="28dp"
-                    tools:layout_editor_absoluteY="603dp" />
+                    tools:layout_editor_absoluteY="603dp"/>
 
                 <Spinner
                     android:id="@+id/spinnerAssignTo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
 
             </TableRow>
 
@@ -310,12 +303,12 @@
                     android:layout_height="wrap_content"
                     android:text="Priority *"
                     tools:layout_editor_absoluteX="28dp"
-                    tools:layout_editor_absoluteY="532dp" />
+                    tools:layout_editor_absoluteY="532dp"/>
 
                 <Spinner
                     android:id="@+id/spinnerPriority"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
 
             </TableRow>
 
@@ -327,44 +320,32 @@
                     android:layout_height="wrap_content"
                     android:text="Status *"
                     tools:layout_editor_absoluteX="28dp"
-                    tools:layout_editor_absoluteY="532dp" />
+                    tools:layout_editor_absoluteY="532dp"/>
 
                 <Spinner
                     android:id="@+id/spinnerStatus"
                     android:layout_width="213dp"
                     android:layout_height="27dp"
                     tools:layout_editor_absoluteX="170dp"
-                    tools:layout_editor_absoluteY="551dp" />
+                    tools:layout_editor_absoluteY="551dp"/>
             </TableRow>
         </TableLayout>
 
         <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnCreateOrder"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="72dp"
-            android:layout_marginLeft="72dp"
-            android:layout_marginBottom="8dp"
-            android:text="Cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/create" />
-
-        <Button
-            android:id="@+id/create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="72dp"
-            android:layout_marginRight="72dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:text="Create"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cancel"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout2" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout2"/>
 
 
     </android.support.constraint.ConstraintLayout>

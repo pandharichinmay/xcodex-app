@@ -11,6 +11,7 @@ public class ProductMaster implements Serializable {
 	private Long productUpdated_at;
 	private Long productIdProdmaster;
 	private String application_acronym;
+	private Integer quantity;
 
 	public Long getIdProdMaster() {
 		return idProdMaster;
@@ -76,4 +77,11 @@ public class ProductMaster implements Serializable {
 		this.application_acronym = application_acronym;
 	}
 
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
 }

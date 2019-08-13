@@ -63,7 +63,7 @@
                 android:layout_marginRight="16dp"
                 android:text="categoryStatus"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/txtOrderPriority"
+                app:layout_constraintStart_toEndOf="@+id/txtOrderTitle"
                 app:layout_constraintTop_toBottomOf="@+id/btnOrderStatus" />
 
             <Button

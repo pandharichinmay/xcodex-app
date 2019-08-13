@@ -1,6 +1,8 @@
 package com.example.codex;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +37,7 @@ public class UserDrawer extends AppCompatActivity
     private RecyclerView assignedOrders;
     private ToDoAdapter adapter;
     private UserMaster currentUser;
+    private FloatingActionButton addOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,14 @@ public class UserDrawer extends AppCompatActivity
 
         assignedOrders = drawer.findViewById(R.id.assigned_orders);
         assignedOrders.setLayoutManager(new LinearLayoutManager(this));
+
+        addOrder = drawer.findViewById(R.id.btnAddOrder);
+        addOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserDrawer.this, AddOrder.class));
+            }
+        });
 
         loadAssignedOrders();
 

@@ -3,6 +3,8 @@ package com.example.codex.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -15,13 +17,15 @@ import java.util.Date;
 
 public class Utility {
 
-    public static final String HOST_URL = "http://192.168.1.25:8080/";
+    public static final String HOST_URL = "http://192.168.0.103:8080/";
+    public static final String PHP_URL = "http://192.168.0.103/codex/views/php_services/";
+    public static final String ORDER_KEY = "order";
     private static final String PREF_NAME = "codexPrefs";
     public static final String DATE_FORMAT = "MMM dd hh:mm";
 
     public static <T> T fromJson(String response, Class<T> cls, Type token) {
         try {
-            if(token != null) {
+            if (token != null) {
                 return new Gson().fromJson(response, token);
             } else {
                 return new Gson().fromJson(response, cls);
@@ -78,5 +82,24 @@ public class Utility {
         }
         return null;
     }
+
+    public static Integer parseInteger(EditText input) {
+        try {
+            if (!TextUtils.isEmpty(input.getText())) {
+                return Integer.valueOf(input.getText().toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static String getString(Integer quantity) {
+        if (quantity == null) {
+            return "0";
+        }
+        return quantity.toString();
+    }
+
 
 }
