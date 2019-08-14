@@ -27,6 +27,7 @@ import com.example.codex.model.bo.CategoryMaster;
 import com.example.codex.model.bo.CustomerMaster;
 import com.example.codex.model.bo.DepartmentMaster;
 import com.example.codex.model.bo.OrderMaster;
+import com.example.codex.model.bo.OrderProductMapping;
 import com.example.codex.model.bo.OrderStatusMaster;
 import com.example.codex.model.bo.OrderTypeMaster;
 import com.example.codex.model.bo.PriorityMaster;
@@ -86,7 +87,6 @@ public class AddOrder extends AppCompatActivity {
         String orderJson = getIntent().getStringExtra(Utility.ORDER_KEY);
         currentOrder = Utility.fromJson(orderJson, OrderMaster.class, null);
 
-
         customerSpinner = findViewById(R.id.spinnerCustomer);
         departmentSpinner = findViewById(R.id.spinnerDepartment);
         typeSpinner = findViewById(R.id.spinnerType);
@@ -114,15 +114,17 @@ public class AddOrder extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                OrderProductMapping map = new OrderProductMapping();
                 ProductMaster prod = products.get(productSpinner.getSelectedItemPosition());
                 if (prod != null) {
-                    prod.setQuantity(Utility.parseInteger(quantity));
-                    System.out.println("Prod quantity => " + prod.getQuantity() + " == " + quantity.getText());
+                    map.setProduct_id(prod);
+                    map.setQuantity(Utility.parseInteger(quantity));
+                    System.out.println("Prod quantity => " + map.getQuantity() + " == " + quantity.getText());
                     if (addProductAdapter == null) {
                         addProductAdapter = new AddProductAdapter(AddOrder.this);
                         productsRecyclerView.setAdapter(addProductAdapter);
                     }
-                    addProductAdapter.addProduct(prod);
+                    addProductAdapter.addProduct(map);
                 }
 
             }
@@ -138,33 +140,52 @@ public class AddOrder extends AppCompatActivity {
         fetchAssignTo();
         fetchPriority();
         fetchStatus();
+
+        setOrderDetails();
+    }
+
+    private void setOrderDetails() {
+        if (currentOrder == null) {
+            return;
+        }
+        orderTitle.setText(currentOrder.getTitle());
+        if (currentOrder.getProducts() != null && currentOrder.getProducts().size() > 0) {
+            addProductAdapter.setList(currentOrder.getProducts());
+        }
+
     }
 
     private void saveOrder() {
+        String method = "add_order_service.php";
         final UpdateOrderRequest request = new UpdateOrderRequest();
-        request.setAssign_to(assignToSpinner.getSelectedItemPosition());
-        request.setCategory(categorySpinner.getSelectedItemPosition());
-        request.setCustomer_id(customerSpinner.getSelectedItemPosition());
-        request.setDepartmentid(departmentSpinner.getSelectedItemPosition());
-        request.setPriority(prioritySpinner.getSelectedItemPosition());
-        request.setStatus(statusSpinner.getSelectedItemPosition());
-        request.setTicket_type(typeSpinner.getSelectedItemPosition());
+        if(currentOrder.getIdOrder() != null) {
+            request.setId(currentOrder.getIdOrder());
+            method = "update_order_service.php";
+        }
+        request.setAssign_to(users.get(assignToSpinner.getSelectedItemPosition()).getIdUser());
+        request.setCategory(categories.get(categorySpinner.getSelectedItemPosition()).getIdCategory());
+        request.setCustomer_id(customers.get(customerSpinner.getSelectedItemPosition()).getIdCustomer());
+        request.setDepartmentid(departments.get(departmentSpinner.getSelectedItemPosition()).getIdDept());
+        request.setPriority(priorities.get(prioritySpinner.getSelectedItemPosition()).getIdPriority());
+        request.setStatus(statuses.get(statusSpinner.getSelectedItemPosition()).getIdOrderstatus());
+        request.setTicket_type(types.get(typeSpinner.getSelectedItemPosition()).getIdOrdertype());
         request.setProductsList(addProductAdapter.getSelectedProducts());
         request.setProductQuantity(addProductAdapter.getSelectedProductQuantities());
         request.setTitle(orderTitle.getText().toString());
         request.setUserid(currentUser.getIdUser());
         request.setUsername(currentUser.getUsername());
         request.setSubmitter_id(currentUser.getIdUser().toString());
-        request.setStartDate("");
-        request.setEndDate("");
-        request.setClosureCode("");
+        request.setStart_date("13/08/2019");
+        request.setEnd_date("16/08/2019");
+        request.setDue_date("16/08/2019");
+        request.setClosure_code("");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.PHP_URL + "add_order_service.php", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.PHP_URL + method, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //loadingProgressBar.setVisibility(View.GONE);
                 Toast.makeText(AddOrder.this, "Save Successful..!", Toast.LENGTH_LONG).show();
-                System.out.println("Added successfully .. " + response);
+                System.out.println("Saved successfully .. " + response);
 
             }
         }, new Response.ErrorListener() {
@@ -194,6 +215,7 @@ public class AddOrder extends AppCompatActivity {
             @Override
             public byte[] getBody() throws AuthFailureError {
                 String str = new Gson().toJson(request);
+                System.out.println("JSON ==> " + str);
                 return str.getBytes();
             }
         };
@@ -241,6 +263,10 @@ public class AddOrder extends AppCompatActivity {
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         assignToSpinner.setAdapter(spinnerArrayAdapter);
 
+                        if (currentOrder != null) {
+                            assignToSpinner.setSelection(Utility.getIndexFromList(users, currentOrder.getAssignedTo(), "User"));
+                        }
+
                     }
 
                 } catch (Exception e) {
@@ -277,6 +303,10 @@ public class AddOrder extends AppCompatActivity {
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         departmentSpinner.setAdapter(spinnerArrayAdapter);
+
+                        if (currentOrder != null) {
+                            departmentSpinner.setSelection(Utility.getIndexFromList(departments, currentOrder.getDepartmentid(), "Department"));
+                        }
 
                     }
 
@@ -315,6 +345,10 @@ public class AddOrder extends AppCompatActivity {
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         typeSpinner.setAdapter(spinnerArrayAdapter);
 
+                        if (currentOrder != null) {
+                            typeSpinner.setSelection(Utility.getIndexFromList(types, currentOrder.getTicket_type(), "Type"));
+                        }
+
                     }
 
                 } catch (Exception e) {
@@ -352,6 +386,9 @@ public class AddOrder extends AppCompatActivity {
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         categorySpinner.setAdapter(spinnerArrayAdapter);
 
+                        if (currentOrder != null) {
+                            categorySpinner.setSelection(Utility.getIndexFromList(statuses, currentOrder.getCategory_id(), "Category"));
+                        }
                     }
 
                 } catch (Exception e) {
@@ -426,6 +463,10 @@ public class AddOrder extends AppCompatActivity {
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         prioritySpinner.setAdapter(spinnerArrayAdapter);
 
+                        if (currentOrder != null) {
+                            prioritySpinner.setSelection(Utility.getIndexFromList(priorities, currentOrder.getPriority_id(), "Priority"));
+                        }
+
                     }
 
                 } catch (Exception e) {
@@ -462,6 +503,10 @@ public class AddOrder extends AppCompatActivity {
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         statusSpinner.setAdapter(spinnerArrayAdapter);
 
+                        if (currentOrder != null) {
+                            statusSpinner.setSelection(Utility.getIndexFromList(statuses, currentOrder.getStatus_id(), "Status"));
+                        }
+
                     }
 
                 } catch (Exception e) {
@@ -490,7 +535,7 @@ public class AddOrder extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<CustomerMaster>>() {
                     }.getType();
 
-                    List<CustomerMaster> customers = Utility.fromJson(response, null, listType);
+                    customers = Utility.fromJson(response, null, listType);
                     if (customers != null && customers.size() > 0) {
                         List<String> names = new ArrayList<>();
                         for (CustomerMaster cust : customers) {
@@ -500,6 +545,9 @@ public class AddOrder extends AppCompatActivity {
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         customerSpinner.setAdapter(spinnerArrayAdapter);
 
+                        if (currentOrder != null) {
+                            customerSpinner.setSelection(Utility.getIndexFromList(customers, currentOrder.getCustomer_id(), "Customer"));
+                        }
                     }
 
                 } catch (Exception e) {
