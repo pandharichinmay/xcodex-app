@@ -5,31 +5,30 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.codex.R;
-import com.example.codex.model.bo.OrderProductMapping;
+import com.example.codex.model.bo.OrderHistoryLog;
 
 import com.example.codex.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.RecViewHolder> {
-    private List<OrderProductMapping> list;
+public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.RecViewHolder> {
+    private List<OrderHistoryLog> list;
     private Activity context;
 
-    public ProductListAdapter(List<OrderProductMapping> list, Activity context) {
+    public OrderHistoryAdapter(List<OrderHistoryLog> list, Activity context) {
         this.list = list;
         this.context = context;
     }
 
-    public ProductListAdapter(Activity context) {
+    public OrderHistoryAdapter(Activity context) {
         this.context = context;
     }
 
-    public void setList(List<OrderProductMapping> list) {
+    public void setList(List<OrderHistoryLog> list) {
         System.out.println("Size :-" +list.size());
 
         this.list = list;
@@ -37,15 +36,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     @Override
-    public ProductListAdapter.RecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public OrderHistoryAdapter.RecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         System.out.println("In  RecyclerView");
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_quantity_list, parent, false);
-        return new ProductListAdapter.RecViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_history_row, parent, false);
+        return new OrderHistoryAdapter.RecViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecViewHolder holder, final int position) {
-        final OrderProductMapping product = list.get(position);
+        final OrderHistoryLog product = list.get(position);
 
         holder.bind(product);
 
@@ -69,8 +68,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public List<Long> getSelectedProducts() {
         if (list != null && list.size() > 0) {
             List<Long> products = new ArrayList<>();
-            for (OrderProductMapping prod : list) {
-                products.add(prod.getProduct_id().getIdProdMaster());
+            for (OrderHistoryLog prod : list) {
+            //    products.add(prod.getProduct_id().getIdProdMaster());
             }
             return products;
         }
@@ -80,8 +79,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public List<Integer> getSelectedProductQuantities() {
         if (list != null && list.size() > 0) {
             List<Integer> quantities = new ArrayList<>();
-            for (OrderProductMapping prod : list) {
-                quantities.add(prod.getQuantity());
+            for (OrderHistoryLog prod : list) {
+               // quantities.add(prod.getHistoydescription());
             }
             return quantities;
         }
@@ -90,42 +89,42 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     public class RecViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView productTitle, quantity;
+        private TextView historyTitle,historyDescription,historyDate ;
 
 
         public RecViewHolder(View itemView) {
             super(itemView);
-            productTitle = (TextView) itemView.findViewById(R.id.txtProductTitle);
-            quantity = (TextView) itemView.findViewById(R.id.txtProductQuantity);
+            historyTitle = (TextView) itemView.findViewById(R.id.txtTitle);
+            historyDescription = (TextView) itemView.findViewById(R.id.txtDescription);
+            historyDate = (TextView) itemView.findViewById(R.id.txtDateYear);
 
         }
 
-        private void bind(final OrderProductMapping product) {
+        private void bind(final OrderHistoryLog product) {
 
-            productTitle.setText(product.getProduct_id().getProductApplication());
-            quantity.setText(Utility.getString(product.getQuantity()));
-            System.out.println("Product quantity " + product.getQuantity());
+            historyTitle.setText(product.getHistoydescription());
+            historyDescription.setText(product.getComments());
+            historyDate.setText(product.getTimestamp());
+            System.out.println("History Title " + product.getHistoydescription());
         }
 
     }
 
-    public List<OrderProductMapping> getList() {
+    public List<OrderHistoryLog> getList() {
         return list;
     }
 
-    public void updateCustomerList(List<OrderProductMapping> product) {
+    public void updateCustomerList(List<OrderHistoryLog> product) {
         //setUsers(customers);
         this.list = product;
         notifyDataSetChanged();
     }
 
-    public void addProduct(OrderProductMapping product) {
+    public void addProduct(OrderHistoryLog product) {
         if (list == null) {
             list = new ArrayList<>();
         }
         list.add(product);
         notifyDataSetChanged();
     }
-
-
 }

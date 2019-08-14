@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -19,13 +20,17 @@ import com.android.volley.toolbox.Volley;
 import com.example.codex.Adapters.AddProductAdapter;
 import com.example.codex.Adapters.ProductListAdapter;
 import com.example.codex.model.bo.OrderMaster;
+import com.example.codex.model.bo.OrderProductMapping;
+import com.example.codex.model.bo.ProductMaster;
 import com.example.codex.util.Utility;
 
 public class FragmentDetails extends Fragment {
-    private TextView txtStatusValue, txtPriorityValue, txtDepartmentValue, txtOrderCategory, txtAdminSubmitter, txtAdminAssign, txtDate, txtQuantity, textViewProduct;
+    private TextView txtStatusValue, txtPriorityValue, txtDepartmentValue, txtOrderCategory, txtOrderTitle,txtAdminSubmitter, txtAdminAssign, txtDate, txtQuantity, textViewProduct;
     private static ProgressDialog mProgressDialog;
     private RecyclerView productListRecyclerView;
     private ProductListAdapter productListAdapter;
+    private OrderProductMapping productMaster;
+    private EditText productTitle;
 
     public FragmentDetails() {
     }
@@ -36,6 +41,7 @@ public class FragmentDetails extends Fragment {
 
 
         View view = inflater.inflate(R.layout.fragment_details, container, false);
+
         txtStatusValue = view.findViewById(R.id.txtStatusValue);
         txtPriorityValue = view.findViewById(R.id.txtPriorityValue);
         txtDepartmentValue = view.findViewById(R.id.txtDepartmentValue);
@@ -46,25 +52,24 @@ public class FragmentDetails extends Fragment {
 //        txtQuantity = view.findViewById(R.id.txtQuantity);
 //        textViewProduct = view.findViewById(R.id.textViewProduct);
 
+
         productListRecyclerView = view.findViewById(R.id.productListRecyclerView);
         productListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         productListAdapter = new ProductListAdapter(getActivity());
         productListRecyclerView.setAdapter(productListAdapter);
-
 
         displayOrderDetails();
         return view;
 
     }
 
+
     private void displayOrderDetails() {
         System.out.println("In Assign to");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrderDetails/18", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrderDetails/28", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.println("In Responce" + response);
-
-                System.out.println("In Try" + response);
                 removeSimpleProgressDialog();
                 Log.d("Display Order By ID ...", ">>" + response);
 
@@ -92,6 +97,15 @@ public class FragmentDetails extends Fragment {
                     if (orderMasters.getOrderCreated_at() != null) {
                         txtDate.setText(Utility.convertDate(orderMasters.getOrderCreated_at(), "MMM dd"));
                     }
+                    if (orderMasters.getProducts() != null) {
+                        //orderMasters.getProducts();
+                        productListAdapter.setList(orderMasters.getProducts());
+                    }
+                    if(orderMasters.getTitle()!=null)
+                    {
+                        txtOrderTitle.setText(orderMasters.getTitle());
+                    }
+
 //                        if (orderMasters.getProducts() != null) {
 //                            txtQuantity.setText(orderMasters.getProducts().ge);
 //                        }

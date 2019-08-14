@@ -100,7 +100,7 @@ public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.Re
 
         private void bind(final OrderProductMapping product) {
 
-            productTitle.setText(product.getProduct_id().getProductApplication());
+              productTitle.setText(product.getProduct_id().getProductApplication());
             quantity.setText(Utility.getString(product.getQuantity()));
             System.out.println("Adapter prod quantity " + product.getQuantity());
             removeProduct.setOnClickListener(new View.OnClickListener() {

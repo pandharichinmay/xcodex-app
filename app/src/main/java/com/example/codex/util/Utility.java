@@ -25,8 +25,8 @@ import java.util.List;
 
 public class Utility {
 
-    public static final String HOST_URL = "http://192.168.0.103:8080/";
-    public static final String PHP_URL = "http://192.168.0.103/codex/views/php_services/";
+    public static final String HOST_URL = "http://192.168.1.25:8080/";
+    public static final String PHP_URL = "http://192.168.1.25/codex/views/php_services/";
     public static final String ORDER_KEY = "order";
     private static final String PREF_NAME = "codexPrefs";
     public static final String DATE_FORMAT = "MMM dd hh:mm";
