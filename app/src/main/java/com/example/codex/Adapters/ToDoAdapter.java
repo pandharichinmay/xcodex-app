@@ -1,6 +1,7 @@
 package com.example.codex.Adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.codex.AddOrder;
 import com.example.codex.R;
 import com.example.codex.model.bo.OrderMaster;
 import com.example.codex.util.Utility;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -45,12 +48,13 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                order.getUser().setCurrentBusiness(currentUser.getCurrentBusiness());
-//                context.startActivity(Utility.nextIntent(context, GenericCustomerProfileActivity.class, true, order.getUser(), Utility.CUSTOMER_KEY));
-
+                //TODO
+                Intent intent = new Intent(context, TabbedAdapter.class);
+                intent.putExtra(Utility.ORDER_KEY, new Gson().toJson(order));
+                context.startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -89,6 +93,15 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             if (todo.getStatus_id() != null) {
                 status.setText(todo.getStatus_id().getStatus());
             }
+
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, AddOrder.class);
+                    intent.putExtra(Utility.ORDER_KEY, new Gson().toJson(todo));
+                    context.startActivity(intent);
+                }
+            });
 
         }
 

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.codex.R;
-import com.example.codex.model.bo.ProductMaster;
+import com.example.codex.model.bo.OrderProductMapping;
 import com.example.codex.util.Utility;
 
 import java.util.ArrayList;
@@ -17,10 +17,10 @@ import java.util.List;
 
 public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.RecViewHolder> {
 
-    private List<ProductMaster> list;
+    private List<OrderProductMapping> list;
     private Activity context;
 
-    public AddProductAdapter(List<ProductMaster> list, Activity context) {
+    public AddProductAdapter(List<OrderProductMapping> list, Activity context) {
         this.list = list;
         this.context = context;
     }
@@ -29,8 +29,9 @@ public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.Re
         this.context = context;
     }
 
-    public void setList(List<ProductMaster> list) {
+    public void setList(List<OrderProductMapping> list) {
         this.list = list;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -41,7 +42,7 @@ public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.Re
 
     @Override
     public void onBindViewHolder(RecViewHolder holder, final int position) {
-        final ProductMaster product = list.get(position);
+        final OrderProductMapping product = list.get(position);
 
         holder.bind(product);
 
@@ -62,11 +63,11 @@ public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.Re
         return list == null ? 0 : list.size();
     }
 
-    public List<Integer> getSelectedProducts() {
+    public List<Long> getSelectedProducts() {
         if (list != null && list.size() > 0) {
-            List<Integer> products = new ArrayList<>();
-            for (ProductMaster prod : list) {
-                products.add(prod.getIdProdMaster().intValue());
+            List<Long> products = new ArrayList<>();
+            for (OrderProductMapping prod : list) {
+                products.add(prod.getProduct_id().getIdProdMaster());
             }
             return products;
         }
@@ -76,7 +77,7 @@ public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.Re
     public List<Integer> getSelectedProductQuantities() {
         if (list != null && list.size() > 0) {
             List<Integer> quantities = new ArrayList<>();
-            for (ProductMaster prod : list) {
+            for (OrderProductMapping prod : list) {
                 quantities.add(prod.getQuantity());
             }
             return quantities;
@@ -92,22 +93,22 @@ public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.Re
         public RecViewHolder(View itemView) {
             super(itemView);
             productTitle = (TextView) itemView.findViewById(R.id.txtProductTitle);
-            quantity = (TextView) itemView.findViewById(R.id.txtPriorityValue);
+            quantity = (TextView) itemView.findViewById(R.id.txtProductQuantity);
             removeProduct = (ImageView) itemView.findViewById(R.id.btnRemoveProduct);
 
         }
 
-        private void bind(final ProductMaster product) {
+        private void bind(final OrderProductMapping product) {
 
-            productTitle.setText(product.getProductApplication());
+            productTitle.setText(product.getProduct_id().getProductApplication());
             quantity.setText(Utility.getString(product.getQuantity()));
             System.out.println("Adapter prod quantity " + product.getQuantity());
             removeProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int index = 0;
-                    for (ProductMaster pro : list) {
-                        if (pro.getIdProdMaster() == product.getIdProdMaster()) {
+                    for (OrderProductMapping pro : list) {
+                        if (pro.getProduct_id().getIdProdMaster() == product.getProduct_id().getIdProdMaster()) {
                             break;
                         }
                         index++;
@@ -124,17 +125,17 @@ public class AddProductAdapter extends RecyclerView.Adapter<AddProductAdapter.Re
 
     }
 
-    public List<ProductMaster> getList() {
+    public List<OrderProductMapping> getList() {
         return list;
     }
 
-    public void updateCustomerList(List<ProductMaster> product) {
+    public void updateCustomerList(List<OrderProductMapping> product) {
         //setUsers(customers);
         this.list = product;
         notifyDataSetChanged();
     }
 
-    public void addProduct(ProductMaster product) {
+    public void addProduct(OrderProductMapping product) {
         if (list == null) {
             list = new ArrayList<>();
         }
