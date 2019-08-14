@@ -10,9 +10,7 @@
         android:layout_height="match_parent"
         tools:context=".fragment_details">
 
-        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -295,6 +293,21 @@
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toEndOf="@+id/txtAssignTo"
                         app:layout_constraintTop_toBottomOf="@+id/txtAdminSubmitter" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/productListRecyclerView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtDueDate"></android.support.v7.widget.RecyclerView>
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
