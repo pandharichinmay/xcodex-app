@@ -24,8 +24,9 @@ import java.util.Date;
 import java.util.List;
 
 public class Utility {
+    public static final String HOST_URL = "http://332cc3ad.ngrok.io/";
 
-    public static final String HOST_URL = "http://192.168.1.25:8080/";
+    //    public static final String HOST_URL = "http://192.168.1.25:8080/";
     public static final String PHP_URL = "http://192.168.1.25/codex/views/php_services/";
     public static final String ORDER_KEY = "order";
     private static final String PREF_NAME = "codexPrefs";
@@ -111,58 +112,58 @@ public class Utility {
 
 
     public static int getIndexFromList(List list, Object object, String type) {
-        if(list == null || list.size() == 0) {
+        if (list == null || list.size() == 0) {
             return 0;
         }
-        for(int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             Object obj = list.get(i);
             switch (type) {
                 case "User":
                     UserMaster user = (UserMaster) object;
                     UserMaster comparer = (UserMaster) obj;
-                    if(user.getIdUser() == comparer.getIdUser()) {
+                    if (user.getIdUser() == comparer.getIdUser()) {
                         return i;
                     }
                     break;
                 case "Category":
                     CategoryMaster category = (CategoryMaster) object;
                     CategoryMaster cat1 = (CategoryMaster) obj;
-                    if(category.getIdCategory() == cat1.getIdCategory()) {
+                    if (category.getIdCategory() == cat1.getIdCategory()) {
                         return i;
                     }
                     break;
                 case "Department":
                     DepartmentMaster dept = (DepartmentMaster) object;
                     DepartmentMaster dept1 = (DepartmentMaster) obj;
-                    if(dept.getIdDept() == dept1.getIdDept()) {
+                    if (dept.getIdDept() == dept1.getIdDept()) {
                         return i;
                     }
                     break;
                 case "Type":
                     OrderTypeMaster typ = (OrderTypeMaster) object;
                     OrderTypeMaster type1 = (OrderTypeMaster) obj;
-                    if(typ.getIdOrdertype() == type1.getIdOrdertype()) {
+                    if (typ.getIdOrdertype() == type1.getIdOrdertype()) {
                         return i;
                     }
                     break;
                 case "Status":
                     OrderStatusMaster status = (OrderStatusMaster) object;
                     OrderStatusMaster status1 = (OrderStatusMaster) obj;
-                    if(status.getIdOrderstatus() == status1.getIdOrderstatus()) {
+                    if (status.getIdOrderstatus() == status1.getIdOrderstatus()) {
                         return i;
                     }
                     break;
                 case "Customer":
                     CustomerMaster cust = (CustomerMaster) object;
                     CustomerMaster cust1 = (CustomerMaster) obj;
-                    if(cust.getIdCustomer() == cust1.getIdCustomer()) {
+                    if (cust.getIdCustomer() == cust1.getIdCustomer()) {
                         return i;
                     }
                     break;
                 case "Priority":
                     PriorityMaster pr = (PriorityMaster) object;
                     PriorityMaster pr1 = (PriorityMaster) obj;
-                    if(pr.getIdPriority() == pr1.getIdPriority()) {
+                    if (pr.getIdPriority() == pr1.getIdPriority()) {
                         return i;
                     }
                     break;

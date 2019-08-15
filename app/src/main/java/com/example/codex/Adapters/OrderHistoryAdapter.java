@@ -29,7 +29,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     public void setList(List<OrderHistoryLog> list) {
-        System.out.println("Size :-" +list.size());
+        System.out.println("Size :-" + list.size());
 
         this.list = list;
         notifyDataSetChanged();
@@ -69,7 +69,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         if (list != null && list.size() > 0) {
             List<Long> products = new ArrayList<>();
             for (OrderHistoryLog prod : list) {
-            //    products.add(prod.getProduct_id().getIdProdMaster());
+                //    products.add(prod.getProduct_id().getIdProdMaster());
             }
             return products;
         }
@@ -80,7 +80,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         if (list != null && list.size() > 0) {
             List<Integer> quantities = new ArrayList<>();
             for (OrderHistoryLog prod : list) {
-               // quantities.add(prod.getHistoydescription());
+                // quantities.add(prod.getHistoydescription());
             }
             return quantities;
         }
@@ -89,7 +89,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     public class RecViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView historyTitle,historyDescription,historyDate ;
+        private TextView historyTitle, historyDescription, historyDate;
 
 
         public RecViewHolder(View itemView) {

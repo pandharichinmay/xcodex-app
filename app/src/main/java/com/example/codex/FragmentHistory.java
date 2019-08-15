@@ -19,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.codex.Adapters.OrderHistoryAdapter;
 import com.example.codex.Adapters.ProductListAdapter;
+import com.example.codex.Adapters.ToDoAdapter;
 import com.example.codex.model.bo.CustomerMaster;
 import com.example.codex.model.bo.OrderHistoryLog;
 import com.example.codex.model.bo.OrderMaster;
@@ -31,13 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentHistory extends Fragment {
-    private TextView txtTitle, txtDescription, txtDateYear;
     private static ProgressDialog mProgressDialog;
     private RecyclerView orderHistoryRecyclerView;
     private OrderHistoryAdapter orderHistoryAdapter;
-    private OrderHistoryLog orderHistoryLog;
-    private EditText productTitle;
-    private List<OrderHistoryLog> customers = new ArrayList<>();
+    private List<OrderHistoryLog> orderHistoryLog = new ArrayList<>();
 
     public FragmentHistory() {
         // Required empty public constructor
@@ -48,9 +46,6 @@ public class FragmentHistory extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
-        txtTitle = view.findViewById(R.id.txtTitle);
-        txtDescription = view.findViewById(R.id.txtDescription);
-        txtDateYear = view.findViewById(R.id.txtDateYear);
 
         orderHistoryRecyclerView = view.findViewById(R.id.orderHistoryRecyclerView);
         orderHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -62,30 +57,40 @@ public class FragmentHistory extends Fragment {
     }
 
     private void displayOrderHistory() {
-        System.out.println("In Assign to");
+        System.out.println("In Assign to " + Utility.HOST_URL + "getOrderHistory/18");
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrderHistory/18", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.println("In Responce" + response);
                 removeSimpleProgressDialog();
+                // System.out.println(""+ Err);
                 Log.d("Display Order By ID ...", ">>" + response);
-
+//
+//                Type listType = new TypeToken<ArrayList<OrderHistoryLog>>() {
+//                }.getType();
+//
+//                orderHistoryLog = Utility.fromJson(response, null, listType);
+//
+//                if (orderHistoryLog != null) {
+//                    System.out.println("In If" + response);
+//                    if (orderHistoryLog.getHistoydescription() != null) {
+//                        txtTitle.setText(orderHistoryLog.getHistoydescription());
+//                    }
+//                    if (orderHistoryLog.getComments() != null) {
+//                        txtDescription.setText(orderHistoryLog.getComments());
+//                    }
+//                    if (orderHistoryLog.getTimestamp() != null) {
+//                        txtDateYear.setText(Utility.convertDate(orderHistoryLog.getTimestamp(), "MMM dd yyyy"));
+//                    }
+                //}
                 Type listType = new TypeToken<ArrayList<OrderHistoryLog>>() {
                 }.getType();
 
-                customers = Utility.fromJson(response, null, listType);
+                orderHistoryLog = Utility.fromJson(response, null, listType);
+                if (orderHistoryLog != null && orderHistoryLog.size() > 0) {
 
-                if (orderHistoryLog != null) {
-                    System.out.println("In If" + response);
-                    if (orderHistoryLog.getHistoydescription() != null) {
-                        txtTitle.setText(orderHistoryLog.getHistoydescription());
-                    }
-                    if (orderHistoryLog.getComments() != null) {
-                        txtDescription.setText(orderHistoryLog.getComments());
-                    }
-                    if (orderHistoryLog.getTimestamp() != null) {
-                        txtDateYear.setText(Utility.convertDate(orderHistoryLog.getTimestamp(), "MMM dd yyyy"));
-                    }
+                    orderHistoryAdapter = new OrderHistoryAdapter(orderHistoryLog, getActivity());
+                    orderHistoryRecyclerView.setAdapter(orderHistoryAdapter);
                 } else {
                     System.out.println("Else Block" + response);
                 }
