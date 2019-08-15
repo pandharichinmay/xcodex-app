@@ -227,8 +227,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="25dp"
-            app:layout_constraintBottom_toTopOf="@+id/tableLayout2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtAddProduct"></android.support.v7.widget.RecyclerView>
@@ -257,27 +255,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recyclerProducts">
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/txtsubmitter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submitter *"
-                    tools:layout_editor_absoluteX="28dp"
-                    tools:layout_editor_absoluteY="603dp"/>
-
-                <EditText
-                    android:id="@+id/editadmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    tools:layout_editor_absoluteX="174dp"
-                    tools:layout_editor_absoluteY="591dp"/>
-
-            </TableRow>
 
             <TableRow>
 
@@ -342,7 +319,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Create"
+            android:text="SAVE"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
