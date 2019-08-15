@@ -40,6 +40,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,9 +177,12 @@ public class AddOrder extends AppCompatActivity {
         request.setUserid(currentUser.getIdUser());
         request.setUsername(currentUser.getUsername());
         request.setSubmitter_id(currentUser.getIdUser().toString());
-        request.setStart_date("13/08/2019");
-        request.setEnd_date("16/08/2019");
-        request.setDue_date("16/08/2019");
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 7);
+        request.setStart_date(Utility.convertDate(date, "dd/MM/yyyy"));
+        request.setEnd_date(Utility.convertDate(cal.getTime(), "dd/MM/yyyy"));
+        request.setDue_date(Utility.convertDate(cal.getTime(), "dd/MM/yyyy"));
         request.setClosure_code("");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.PHP_URL + method, new Response.Listener<String>() {
@@ -265,6 +270,8 @@ public class AddOrder extends AppCompatActivity {
 
                         if (currentOrder != null) {
                             assignToSpinner.setSelection(Utility.getIndexFromList(users, currentOrder.getAssignedTo(), "User"));
+                        } else {
+                            assignToSpinner.setSelection(Utility.getIndexFromList(users, currentUser.getIdUser(), "User"));
                         }
 
                     }

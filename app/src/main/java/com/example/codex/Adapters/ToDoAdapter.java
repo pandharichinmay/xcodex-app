@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,9 +48,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             @Override
             public void onClick(View view) {
                 //TODO
-                Intent intent = new Intent(context, TabbedAdapter.class);
-                intent.putExtra(Utility.ORDER_KEY, new Gson().toJson(order));
-                context.startActivity(intent);
+                //Intent intent = new Intent(context, TabbedAdapter.class);
+                //intent.putExtra(Utility.ORDER_KEY, new Gson().toJson(order));
+                //context.startActivity(intent);
             }
         });
 
@@ -66,7 +65,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
 
         private TextView txtpriorityStatus, txtcategoryStatus;
         private TextView orderTitle, dueDate;
-        private Button status;
+        private TextView status;
         private ImageView editButton;
 
         public RecViewHolder(View itemView) {
@@ -75,7 +74,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             txtcategoryStatus = (TextView) itemView.findViewById(R.id.txtOrderCategory);
             orderTitle = (TextView) itemView.findViewById(R.id.txtOrderTitle);
             dueDate = (TextView) itemView.findViewById(R.id.txtDueDate);
-            status = (Button) itemView.findViewById(R.id.btnOrderStatus);
+            status = (TextView) itemView.findViewById(R.id.btnOrderStatus);
             editButton = (ImageView) itemView.findViewById(R.id.btnEditOrder);
         }
 

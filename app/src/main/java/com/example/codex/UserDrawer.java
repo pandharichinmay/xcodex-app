@@ -31,8 +31,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDrawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class UserDrawer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView assignedOrders;
     private ToDoAdapter adapter;
@@ -55,8 +54,7 @@ public class UserDrawer extends AppCompatActivity
 //        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
@@ -77,8 +75,12 @@ public class UserDrawer extends AppCompatActivity
         loadAssignedOrders();
 
 
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadAssignedOrders();
     }
 
     private void loadAssignedOrders() {
@@ -91,7 +93,8 @@ public class UserDrawer extends AppCompatActivity
                     //removeSimpleProgressDialog();
                     Log.d("response", ">>" + response);
 
-                    Type listType = new TypeToken<ArrayList<OrderMaster>>() {}.getType();
+                    Type listType = new TypeToken<ArrayList<OrderMaster>>() {
+                    }.getType();
 
                     List<OrderMaster> orders = Utility.fromJson(response, null, listType);
                     if (orders != null && orders.size() > 0) {
