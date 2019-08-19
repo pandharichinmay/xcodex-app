@@ -5,12 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.codex.R;
 import com.example.codex.model.bo.OrderProductMapping;
-
 import com.example.codex.util.Utility;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     public void setList(List<OrderProductMapping> list) {
-        System.out.println("Size :-" +list.size());
+        System.out.println("Size :-" + list.size());
 
         this.list = list;
         notifyDataSetChanged();
@@ -104,7 +102,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
             productTitle.setText(product.getProduct_id().getProductApplication());
             quantity.setText(Utility.getString(product.getQuantity()));
-            System.out.println("Product quantity " + product.getQuantity());
+            System.out.println("Product quantity " + product.getQuantity() + " for product " + product.getProduct_id().getProductApplication());
         }
 
     }

@@ -24,16 +24,22 @@ import java.util.Date;
 import java.util.List;
 
 public class Utility {
-    public static final String HOST_URL = "http://332cc3ad.ngrok.io/";
+    //public static final String HOST_URL = "http://332cc3ad.ngrok.io/";
 
-    //    public static final String HOST_URL = "http://192.168.1.25:8080/";
-    public static final String PHP_URL = "http://192.168.1.25/codex/views/php_services/";
+    public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
+    //public static final String HOST_URL = "http://192.168.0.103:8080/";
+    //public static final String PHP_URL = "http://192.168.0.103/codex/views/php_services/";
+    public static final String PHP_URL = "http://xcodex.in/views/php_services/";
+
     public static final String ORDER_KEY = "order";
     private static final String PREF_NAME = "codexPrefs";
     public static final String DATE_FORMAT = "MMM dd hh:mm";
 
     public static <T> T fromJson(String response, Class<T> cls, Type token) {
         try {
+            if (response == null) {
+                return null;
+            }
             if (token != null) {
                 return new Gson().fromJson(response, token);
             } else {

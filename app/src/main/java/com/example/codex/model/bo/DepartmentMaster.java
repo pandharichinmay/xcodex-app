@@ -8,19 +8,19 @@ import java.util.Date;
 
 public class DepartmentMaster implements Serializable {
 	private Long idDept;
-	private String business_unit;
+	private String businessUnit;
 	private String active;
 	private Long deptCreated_by;
 	private Date deptCreated_at;
 	private Date deptUpdated_by;
 	private Date deptUpdated_at;
 
-	public String getBusiness_unit() {
-		return business_unit;
+	public String getBusinessUnit() {
+		return businessUnit;
 	}
 
-	public void setBusiness_unit(String business_unit) {
-		this.business_unit = business_unit;
+	public void setBusinessUnit(String businessUnit) {
+		this.businessUnit = businessUnit;
 	}
 
 	public String getActive() {

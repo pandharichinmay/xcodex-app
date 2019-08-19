@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.codex.AddOrder;
+import com.example.codex.OrderDetailsActivity;
 import com.example.codex.R;
 import com.example.codex.model.bo.OrderMaster;
 import com.example.codex.util.Utility;
@@ -48,9 +49,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             @Override
             public void onClick(View view) {
                 //TODO
-                //Intent intent = new Intent(context, TabbedAdapter.class);
-                //intent.putExtra(Utility.ORDER_KEY, new Gson().toJson(order));
-                //context.startActivity(intent);
+                Intent intent = new Intent(context, OrderDetailsActivity.class);
+                intent.putExtra(Utility.ORDER_KEY, new Gson().toJson(order));
+                context.startActivity(intent);
             }
         });
 

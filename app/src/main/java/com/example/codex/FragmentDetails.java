@@ -17,27 +17,30 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.codex.Adapters.AddProductAdapter;
 import com.example.codex.Adapters.ProductListAdapter;
 import com.example.codex.model.bo.OrderMaster;
 import com.example.codex.model.bo.OrderProductMapping;
-import com.example.codex.model.bo.ProductMaster;
 import com.example.codex.util.Utility;
 
 public class FragmentDetails extends Fragment {
-    private TextView txtStatusValue, txtPriorityValue, txtDepartmentValue, txtOrderCategory, txtOrderTitle,txtAdminSubmitter, txtAdminAssign, txtDate, txtQuantity, textViewProduct;
+    private TextView txtStatusValue, txtPriorityValue, txtDepartmentValue, txtOrderCategory, txtOrderTitle, txtAdminSubmitter, txtAdminAssign, txtDate, txtQuantity, textViewProduct;
     private static ProgressDialog mProgressDialog;
     private RecyclerView productListRecyclerView;
     private ProductListAdapter productListAdapter;
     private OrderProductMapping productMaster;
     private EditText productTitle;
+    private OrderMaster currentOrder;
 
     public FragmentDetails() {
+        //this.currentOrder = order;
+    }
+
+    public void setCurrentOrder(OrderMaster currentOrder) {
+        this.currentOrder = currentOrder;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
         View view = inflater.inflate(R.layout.fragment_details, container, false);
@@ -49,6 +52,8 @@ public class FragmentDetails extends Fragment {
         txtAdminSubmitter = view.findViewById(R.id.txtAdminSubmitter);
         txtAdminAssign = view.findViewById(R.id.txtAdminAssign);
         txtDate = view.findViewById(R.id.txtDate);
+        txtOrderTitle = view.findViewById(R.id.txtOrderTitle);
+
 //        txtQuantity = view.findViewById(R.id.txtQuantity);
 //        textViewProduct = view.findViewById(R.id.textViewProduct);
 
@@ -66,7 +71,7 @@ public class FragmentDetails extends Fragment {
 
     private void displayOrderDetails() {
         System.out.println("In Assign to");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrderDetails/28", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrderDetails/" + currentOrder.getIdOrder(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.println("In Responce" + response);
@@ -83,7 +88,7 @@ public class FragmentDetails extends Fragment {
                         txtPriorityValue.setText(orderMasters.getPriority_id().getPriority());
                     }
                     if (orderMasters.getDepartmentid() != null) {
-                        txtDepartmentValue.setText(orderMasters.getDepartmentid().getBusiness_unit());
+                        txtDepartmentValue.setText(orderMasters.getDepartmentid().getBusinessUnit());
                     }
                     if (orderMasters.getCategory_id() != null) {
                         txtOrderCategory.setText(orderMasters.getCategory_id().getCategory());
@@ -101,8 +106,7 @@ public class FragmentDetails extends Fragment {
                         //orderMasters.getProducts();
                         productListAdapter.setList(orderMasters.getProducts());
                     }
-                    if(orderMasters.getTitle()!=null)
-                    {
+                    if (orderMasters.getTitle() != null) {
                         txtOrderTitle.setText(orderMasters.getTitle());
                     }
 

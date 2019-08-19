@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,12 +16,8 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.codex.Adapters.OrderHistoryAdapter;
-import com.example.codex.Adapters.ProductListAdapter;
-import com.example.codex.Adapters.ToDoAdapter;
-import com.example.codex.model.bo.CustomerMaster;
 import com.example.codex.model.bo.OrderHistoryLog;
 import com.example.codex.model.bo.OrderMaster;
-import com.example.codex.model.bo.OrderProductMapping;
 import com.example.codex.util.Utility;
 import com.google.gson.reflect.TypeToken;
 
@@ -36,14 +30,18 @@ public class FragmentHistory extends Fragment {
     private RecyclerView orderHistoryRecyclerView;
     private OrderHistoryAdapter orderHistoryAdapter;
     private List<OrderHistoryLog> orderHistoryLog = new ArrayList<>();
+    private OrderMaster currentOrder;
 
     public FragmentHistory() {
         // Required empty public constructor
     }
 
+    public void setCurrentOrder(OrderMaster currentOrder) {
+        this.currentOrder = currentOrder;
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
@@ -58,7 +56,7 @@ public class FragmentHistory extends Fragment {
 
     private void displayOrderHistory() {
         System.out.println("In Assign to " + Utility.HOST_URL + "getOrderHistory/18");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrderHistory/18", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrderHistory/" + currentOrder.getIdOrder(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.println("In Responce" + response);

@@ -144,10 +144,12 @@ public class AddOrder extends AppCompatActivity {
         fetchStatus();
 
         setOrderDetails();
+        System.out.println("Loaded full ..");
     }
 
     private void setOrderDetails() {
         if (currentOrder == null) {
+            System.out.println("New Order ..");
             return;
         }
         orderTitle.setText(currentOrder.getTitle());
@@ -160,7 +162,7 @@ public class AddOrder extends AppCompatActivity {
     private void saveOrder() {
         String method = "add_order_service.php";
         final UpdateOrderRequest request = new UpdateOrderRequest();
-        if(currentOrder.getIdOrder() != null) {
+        if (currentOrder != null && currentOrder.getIdOrder() != null) {
             request.setId(currentOrder.getIdOrder());
             method = "update_order_service.php";
         }
@@ -262,7 +264,9 @@ public class AddOrder extends AppCompatActivity {
                         users = userList;
                         List<String> names = new ArrayList<>();
                         for (UserMaster cust : userList) {
-                            names.add(cust.getUsername());
+                            if (cust.getUsername() != null) {
+                                names.add(cust.getUsername());
+                            }
                         }
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
@@ -271,9 +275,9 @@ public class AddOrder extends AppCompatActivity {
                         if (currentOrder != null) {
                             assignToSpinner.setSelection(Utility.getIndexFromList(users, currentOrder.getAssignedTo(), "User"));
                         } else {
-                            assignToSpinner.setSelection(Utility.getIndexFromList(users, currentUser.getIdUser(), "User"));
+                            assignToSpinner.setSelection(Utility.getIndexFromList(users, currentUser, "User"));
                         }
-
+                        System.out.println("In assign to .... " + names);
                     }
 
                 } catch (Exception e) {
@@ -295,7 +299,7 @@ public class AddOrder extends AppCompatActivity {
 
                 try {
                     removeSimpleProgressDialog();
-                    Log.d("strrrrr", ">>" + response);
+                    Log.d("Department list", "Departments === " + response);
 
                     Type listType = new TypeToken<ArrayList<DepartmentMaster>>() {
                     }.getType();
@@ -305,8 +309,11 @@ public class AddOrder extends AppCompatActivity {
                         departments = departmentList;
                         List<String> names = new ArrayList<>();
                         for (DepartmentMaster cust : departmentList) {
-                            names.add(cust.getBusiness_unit());
+                            if (cust.getBusinessUnit() != null) {
+                                names.add(cust.getBusinessUnit());
+                            }
                         }
+                        System.out.println("Dept names === " + names);
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         departmentSpinner.setAdapter(spinnerArrayAdapter);
@@ -346,7 +353,10 @@ public class AddOrder extends AppCompatActivity {
                         types = orderTypeList;
                         List<String> names = new ArrayList<>();
                         for (OrderTypeMaster cust : orderTypeList) {
-                            names.add(cust.getType());
+                            if (cust.getType() != null) {
+                                names.add(cust.getType());
+                            }
+
                         }
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
@@ -387,7 +397,9 @@ public class AddOrder extends AppCompatActivity {
                         categories = categoryList;
                         List<String> names = new ArrayList<>();
                         for (CategoryMaster cust : categoryList) {
-                            names.add(cust.getCategory());
+                            if (cust.getCategory() != null) {
+                                names.add(cust.getCategory());
+                            }
                         }
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
@@ -427,12 +439,15 @@ public class AddOrder extends AppCompatActivity {
                         products = productList;
                         List<String> names = new ArrayList<>();
                         for (ProductMaster cust : productList) {
-                            names.add(cust.getProductApplication());
+                            if (cust.getProductApplication() != null) {
+                                names.add(cust.getProductApplication());
+                            }
                         }
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         productSpinner.setAdapter(spinnerArrayAdapter);
 
+                        System.out.println("In products .... " + names);
                     }
 
                 } catch (Exception e) {
@@ -464,7 +479,9 @@ public class AddOrder extends AppCompatActivity {
                     if (priorities != null && priorities.size() > 0) {
                         List<String> names = new ArrayList<>();
                         for (PriorityMaster cust : priorities) {
-                            names.add(cust.getPriority());
+                            if (cust.getIdPriority() != null) {
+                                names.add(cust.getPriority());
+                            }
                         }
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
@@ -504,7 +521,9 @@ public class AddOrder extends AppCompatActivity {
                     if (statuses != null && statuses.size() > 0) {
                         List<String> names = new ArrayList<>();
                         for (OrderStatusMaster cust : statuses) {
-                            names.add(cust.getStatus());
+                            if (cust.getStatus() != null) {
+                                names.add(cust.getStatus());
+                            }
                         }
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
@@ -546,7 +565,9 @@ public class AddOrder extends AppCompatActivity {
                     if (customers != null && customers.size() > 0) {
                         List<String> names = new ArrayList<>();
                         for (CustomerMaster cust : customers) {
-                            names.add(cust.getCustName());
+                            if (cust.getCustName() != null) {
+                                names.add(cust.getCustName());
+                            }
                         }
                         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
                         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
