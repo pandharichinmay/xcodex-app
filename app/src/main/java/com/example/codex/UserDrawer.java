@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,6 +38,7 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
     private ToDoAdapter adapter;
     private UserMaster currentUser;
     private FloatingActionButton addOrder;
+    final ProgressBar loadingProgressBar = findViewById(R.id.loadingOrder);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        System.out.println("In Order Listener..");
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
@@ -68,6 +71,9 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         addOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("In On Click Listener..");
+
+                loadingProgressBar.setVisibility(View.VISIBLE);
                 startActivity(new Intent(UserDrawer.this, AddOrder.class));
             }
         });
@@ -80,16 +86,22 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
     @Override
     protected void onResume() {
         super.onResume();
+        System.out.println("In OnResume..");
+
         loadAssignedOrders();
     }
 
     private void loadAssignedOrders() {
         Long assignedTo = currentUser.getIdUser();
+        System.out.println("In Load Assigned order..");
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrdersbyAssignTo/" + assignedTo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                loadingProgressBar.setVisibility(View.GONE);
                 try {
+                    System.out.println("In Try..");
+
                     //removeSimpleProgressDialog();
                     Log.d("response", ">>" + response);
 
