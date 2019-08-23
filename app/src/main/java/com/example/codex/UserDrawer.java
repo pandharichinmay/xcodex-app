@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,7 +39,9 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
     private ToDoAdapter adapter;
     private UserMaster currentUser;
     private FloatingActionButton addOrder;
-    final ProgressBar loadingProgressBar = findViewById(R.id.loadingOrder);
+    private ProgressBar loadingProgressBar;
+    private TextView name;
+    private TextView subText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,10 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         setContentView(R.layout.activity_user_drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
+
+
 //        FloatingActionButton fab = findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -62,7 +69,12 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
+        //Setup profile
+        name = navigationView.getHeaderView(0).findViewById(R.id.profileName);
+        name.setText(currentUser.getUsername());
+        subText = navigationView.findViewById(R.id.profileSubText);
+        //TODO subText.setText(currentUser.g);
+
 
         assignedOrders = drawer.findViewById(R.id.assigned_orders);
         assignedOrders.setLayoutManager(new LinearLayoutManager(this));
@@ -73,10 +85,12 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
             public void onClick(View view) {
                 System.out.println("In On Click Listener..");
 
-                loadingProgressBar.setVisibility(View.VISIBLE);
+                //loadingProgressBar.setVisibility(View.VISIBLE);
                 startActivity(new Intent(UserDrawer.this, AddOrder.class));
             }
         });
+
+        loadingProgressBar = drawer.findViewById(R.id.loadingAssignedOrders);
 
         loadAssignedOrders();
 
@@ -169,7 +183,9 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
 
         if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+
+
+        } /*else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -179,7 +195,7 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
 
         } else if (id == R.id.nav_send) {
 
-        }
+        }*/
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
