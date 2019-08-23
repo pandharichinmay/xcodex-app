@@ -33,12 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDrawer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
     private RecyclerView assignedOrders;
     private ToDoAdapter adapter;
     private UserMaster currentUser;
     private FloatingActionButton addOrder;
-    final ProgressBar loadingProgressBar = findViewById(R.id.loadingOrder);
+    private ProgressBar loadingProgressBar = findViewById(R.id.loadingOrder);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +45,14 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         setContentView(R.layout.activity_user_drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+//FloatingActionButton fab = findViewById(R.id.fab);
+//fab.setOnClickListener(new View.OnClickListener() {
+//@Override
+//public void onClick(View view) {
+//Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//.setAction("Action", null).show();
+//}
+//});
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -61,14 +60,12 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
         currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
-
         assignedOrders = drawer.findViewById(R.id.assigned_orders);
         assignedOrders.setLayoutManager(new LinearLayoutManager(this));
-
         addOrder = drawer.findViewById(R.id.btnAddOrder);
         addOrder.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 System.out.println("In On Click Listener..");
@@ -79,7 +76,6 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         });
 
         loadAssignedOrders();
-
 
     }
 
