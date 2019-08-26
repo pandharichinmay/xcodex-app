@@ -88,7 +88,13 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
                 txtcategoryStatus.setText(todo.getCategory_id().getCategory());
             }
 
-            orderTitle.setText(todo.getTitle());
+            if (todo.getCustomer_id() != null) {
+                orderTitle.setText(todo.getCustomer_id().getCustName());
+            } else {
+                orderTitle.setText(todo.getTitle());
+            }
+
+
             dueDate.setText(Utility.convertDate(todo.getDue_date(), Utility.DATE_FORMAT));
             if (todo.getStatus_id() != null) {
                 status.setText(todo.getStatus_id().getStatus());

@@ -24,7 +24,7 @@ import com.example.codex.model.bo.OrderProductMapping;
 import com.example.codex.util.Utility;
 
 public class FragmentDetails extends Fragment {
-    private TextView txtStatusValue, txtPriorityValue, txtDepartmentValue, txtOrderCategory, txtOrderTitle, txtAdminSubmitter, txtAdminAssign, txtDate, txtQuantity, textViewProduct;
+    private TextView txtStatusValue, txtPriorityValue, txtDepartmentValue, txtOrderCategory, txtOrderTitle, txtAdminSubmitter, txtAdminAssign, txtDate, txtQuantity, textViewProduct, txtRemark;
     private static ProgressDialog mProgressDialog;
     private RecyclerView productListRecyclerView;
     private ProductListAdapter productListAdapter;
@@ -56,6 +56,7 @@ public class FragmentDetails extends Fragment {
         txtDate = view.findViewById(R.id.txtDate);
         txtOrderTitle = view.findViewById(R.id.txtOrderTitle);
         progress = view.findViewById(R.id.loadingOrderDetails);
+        txtRemark = view.findViewById(R.id.txtRemark);
 
 //        txtQuantity = view.findViewById(R.id.txtQuantity);
 //        textViewProduct = view.findViewById(R.id.textViewProduct);
@@ -118,6 +119,8 @@ public class FragmentDetails extends Fragment {
                     } else {
                         txtOrderTitle.setText(orderMasters.getTitle());
                     }
+
+                    txtRemark.setText(orderMasters.getTitle());
 
                     if (orderMasters.getOrderCreated_by() != null) {
                         txtAdminSubmitter.setText(orderMasters.getOrderCreated_by().getUsername());
