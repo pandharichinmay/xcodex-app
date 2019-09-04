@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -23,13 +24,14 @@ import com.example.codex.model.bo.OrderProductMapping;
 import com.example.codex.util.Utility;
 
 public class FragmentDetails extends Fragment {
-    private TextView txtStatusValue, txtPriorityValue, txtDepartmentValue, txtOrderCategory, txtOrderTitle, txtAdminSubmitter, txtAdminAssign, txtDate, txtQuantity, textViewProduct;
+    private TextView txtStatusValue, txtPriorityValue, txtDepartmentValue, txtOrderCategory, txtOrderTitle, txtAdminSubmitter, txtAdminAssign, txtDate, txtQuantity, textViewProduct, txtRemark;
     private static ProgressDialog mProgressDialog;
     private RecyclerView productListRecyclerView;
     private ProductListAdapter productListAdapter;
     private OrderProductMapping productMaster;
     private EditText productTitle;
     private OrderMaster currentOrder;
+    private ProgressBar progress;
 
     public FragmentDetails() {
         //this.currentOrder = order;
@@ -53,6 +55,8 @@ public class FragmentDetails extends Fragment {
         txtAdminAssign = view.findViewById(R.id.txtAdminAssign);
         txtDate = view.findViewById(R.id.txtDate);
         txtOrderTitle = view.findViewById(R.id.txtOrderTitle);
+        progress = view.findViewById(R.id.loadingOrderDetails);
+        txtRemark = view.findViewById(R.id.txtRemark);
 
 //        txtQuantity = view.findViewById(R.id.txtQuantity);
 //        textViewProduct = view.findViewById(R.id.textViewProduct);
@@ -74,8 +78,11 @@ public class FragmentDetails extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrderDetails/" + currentOrder.getIdOrder(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
+
                 System.out.println("In Responce" + response);
-                removeSimpleProgressDialog();
+                //removeSimpleProgressDialog();
+                progress.setVisibility(View.GONE);
                 Log.d("Display Order By ID ...", ">>" + response);
 
                 OrderMaster orderMasters = Utility.fromJson(response, OrderMaster.class, null);
@@ -106,8 +113,17 @@ public class FragmentDetails extends Fragment {
                         //orderMasters.getProducts();
                         productListAdapter.setList(orderMasters.getProducts());
                     }
-                    if (orderMasters.getTitle() != null) {
+
+                    if (orderMasters.getCustomer_id() != null) {
+                        txtOrderTitle.setText(orderMasters.getCustomer_id().getCustName());
+                    } else {
                         txtOrderTitle.setText(orderMasters.getTitle());
+                    }
+
+                    txtRemark.setText(orderMasters.getTitle());
+
+                    if (orderMasters.getOrderCreated_by() != null) {
+                        txtAdminSubmitter.setText(orderMasters.getOrderCreated_by().getUsername());
                     }
 
 //                        if (orderMasters.getProducts() != null) {

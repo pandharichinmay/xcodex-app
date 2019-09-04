@@ -363,7 +363,14 @@ public class AddOrder extends AppCompatActivity {
                         typeSpinner.setAdapter(spinnerArrayAdapter);
 
                         if (currentOrder != null) {
-                            typeSpinner.setSelection(Utility.getIndexFromList(types, currentOrder.getTicket_type(), "Type"));
+                            //System.out.println("CUrrent type " + currentOrder.getTicket_type() + " type " + )
+                            String ticket_type = currentOrder.getTicket_type();
+                            if (ticket_type != null) {
+                                OrderTypeMaster currType = new OrderTypeMaster();
+                                currType.setIdOrdertype(new Long(ticket_type));
+                                typeSpinner.setSelection(Utility.getIndexFromList(types, currType, "Type"));
+                            }
+
                         }
 
                     }
@@ -406,7 +413,7 @@ public class AddOrder extends AppCompatActivity {
                         categorySpinner.setAdapter(spinnerArrayAdapter);
 
                         if (currentOrder != null) {
-                            categorySpinner.setSelection(Utility.getIndexFromList(statuses, currentOrder.getCategory_id(), "Category"));
+                            categorySpinner.setSelection(Utility.getIndexFromList(categories, currentOrder.getCategory_id(), "Category"));
                         }
                     }
 

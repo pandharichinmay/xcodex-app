@@ -27,8 +27,8 @@ public class Utility {
     //public static final String HOST_URL = "http://332cc3ad.ngrok.io/";
 
     public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
-    //public static final String HOST_URL = "http://192.168.0.103:8080/";
-    //public static final String PHP_URL = "http://192.168.0.103/codex/views/php_services/";
+    //public static final String HOST_URL = "http://192.168.0.107:8080/";
+    //public static final String PHP_URL = "http://192.168.0.107/codex/views/php_services/";
     public static final String PHP_URL = "http://xcodex.in/views/php_services/";
 
     public static final String ORDER_KEY = "order";
@@ -148,7 +148,9 @@ public class Utility {
                 case "Type":
                     OrderTypeMaster typ = (OrderTypeMaster) object;
                     OrderTypeMaster type1 = (OrderTypeMaster) obj;
-                    if (typ.getIdOrdertype() == type1.getIdOrdertype()) {
+                    System.out.println("Comparing .. " + typ.getIdOrdertype() + " with " + type1.getIdOrdertype());
+                    if (typ.getIdOrdertype().intValue() == type1.getIdOrdertype().intValue()) {
+                        System.out.println("Returning " + i);
                         return i;
                     }
                     break;

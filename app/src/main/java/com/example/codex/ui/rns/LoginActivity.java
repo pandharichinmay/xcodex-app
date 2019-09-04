@@ -136,6 +136,8 @@ public class LoginActivity extends AppCompatActivity {
                         UserMaster user = Utility.fromJson(response, UserMaster.class, null);
                         System.out.println("Login Successful ==>" + user.getUsername());
                         Utility.saveToSharedPref(LoginActivity.this, "user", user);
+                        //Send token to Server
+                        sendTokenToServer(user);
                         startActivity(new Intent(LoginActivity.this, UserDrawer.class));
 
                     }
