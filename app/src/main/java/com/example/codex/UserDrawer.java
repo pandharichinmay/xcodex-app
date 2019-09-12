@@ -11,11 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,6 +41,8 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
     private UserMaster currentUser;
     private FloatingActionButton addOrder;
     private ProgressBar loadingProgressBar = findViewById(R.id.loadingOrder);
+    private SearchView mSearchView;
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,11 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
             }
         });
 
+        mSearchView = (SearchView) findViewById(R.id.searchView);
+        mListView = (ListView) findViewById(R.id.listView);
+
+        mListView.setTextFilterEnabled(true);
+        searchCustomerName();
         loadAssignedOrders();
 
     }
@@ -85,6 +95,27 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         System.out.println("In OnResume..");
 
         loadAssignedOrders();
+    }
+
+    private void searchCustomerName() {
+        mSearchView.setIconifiedByDefault(false);
+      //  mSearchView.setOnQueryTextListener(this);
+        mSearchView.setSubmitButtonEnabled(true);
+        mSearchView.setQueryHint("Search Here");
+    }
+
+    public boolean onQueryTextChange(String newText) {
+
+        if (TextUtils.isEmpty(newText)) {
+            mListView.clearTextFilter();
+        } else {
+            mListView.setFilterText(newText);
+        }
+        return true;
+    }
+
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 
     private void loadAssignedOrders() {
