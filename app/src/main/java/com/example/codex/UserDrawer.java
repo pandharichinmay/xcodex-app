@@ -11,14 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,13 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDrawer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private RecyclerView assignedOrders;
     private ToDoAdapter adapter;
     private UserMaster currentUser;
     private FloatingActionButton addOrder;
-    private ProgressBar loadingProgressBar = findViewById(R.id.loadingOrder);
-    private SearchView mSearchView;
-    private ListView mListView;
+    private ProgressBar loadingProgressBar;
+    private TextView name;
+    private TextView subText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +49,18 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         setContentView(R.layout.activity_user_drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//FloatingActionButton fab = findViewById(R.id.fab);
-//fab.setOnClickListener(new View.OnClickListener() {
-//@Override
-//public void onClick(View view) {
-//Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//.setAction("Action", null).show();
-//}
-//});
+
+        currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
+
+
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -65,27 +68,32 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
+
+        //Setup profile
+        name = navigationView.getHeaderView(0).findViewById(R.id.profileName);
+        name.setText(currentUser.getUsername());
+        subText = navigationView.findViewById(R.id.profileSubText);
+        //TODO subText.setText(currentUser.g);
+
+
         assignedOrders = drawer.findViewById(R.id.assigned_orders);
         assignedOrders.setLayoutManager(new LinearLayoutManager(this));
+
         addOrder = drawer.findViewById(R.id.btnAddOrder);
         addOrder.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 System.out.println("In On Click Listener..");
 
-                loadingProgressBar.setVisibility(View.VISIBLE);
+                //loadingProgressBar.setVisibility(View.VISIBLE);
                 startActivity(new Intent(UserDrawer.this, AddOrder.class));
             }
         });
 
-        mSearchView = (SearchView) findViewById(R.id.searchView);
-        mListView = (ListView) findViewById(R.id.listView);
+        loadingProgressBar = drawer.findViewById(R.id.loadingAssignedOrders);
 
-        mListView.setTextFilterEnabled(true);
-        searchCustomerName();
         loadAssignedOrders();
+
 
     }
 
@@ -95,27 +103,6 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         System.out.println("In OnResume..");
 
         loadAssignedOrders();
-    }
-
-    private void searchCustomerName() {
-        mSearchView.setIconifiedByDefault(false);
-      //  mSearchView.setOnQueryTextListener(this);
-        mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Search Here");
-    }
-
-    public boolean onQueryTextChange(String newText) {
-
-        if (TextUtils.isEmpty(newText)) {
-            mListView.clearTextFilter();
-        } else {
-            mListView.setFilterText(newText);
-        }
-        return true;
-    }
-
-    public boolean onQueryTextSubmit(String query) {
-        return false;
     }
 
     private void loadAssignedOrders() {
@@ -196,7 +183,9 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
 
         if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+
+
+        } /*else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -206,7 +195,7 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
 
         } else if (id == R.id.nav_send) {
 
-        }
+        }*/
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
