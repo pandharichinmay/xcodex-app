@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -40,8 +41,11 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
     private UserMaster currentUser;
     private FloatingActionButton addOrder;
     private ProgressBar loadingProgressBar;
+
     private TextView name;
     private TextView subText;
+    private SearchView mSearchView;
+    private ArrayList<OrderMaster> employeeArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +53,6 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         setContentView(R.layout.activity_user_drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
 
 
 //        FloatingActionButton fab = findViewById(R.id.fab);
@@ -68,6 +70,7 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
 
         //Setup profile
         name = navigationView.getHeaderView(0).findViewById(R.id.profileName);
@@ -84,17 +87,39 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
             @Override
             public void onClick(View view) {
                 System.out.println("In On Click Listener..");
-
-                //loadingProgressBar.setVisibility(View.VISIBLE);
+                loadingProgressBar.setVisibility(View.VISIBLE);
                 startActivity(new Intent(UserDrawer.this, AddOrder.class));
             }
         });
 
         loadingProgressBar = drawer.findViewById(R.id.loadingAssignedOrders);
+        mSearchView = (SearchView) findViewById(R.id.searchView);
 
+        setupSearchView();
         loadAssignedOrders();
 
 
+    }
+
+    private void setupSearchView() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (adapter != null) {
+                    adapter.getFilter().filter(query);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (adapter != null) {
+                    adapter.getFilter().filter(newText);
+                }
+                return false;
+            }
+        });
     }
 
     @Override

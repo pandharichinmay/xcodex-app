@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             sendTokenToServer(currentUser);
             //redirect to homepage as already logged in user
             startActivity(new Intent(LoginActivity.this, UserDrawer.class));
-            finishActivity(0);
+            //finishActivity(0);
         }
 
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory()).get(LoginViewModel.class);

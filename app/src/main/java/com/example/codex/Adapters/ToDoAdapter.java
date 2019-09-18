@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,11 +18,13 @@ import com.example.codex.model.bo.OrderMaster;
 import com.example.codex.util.Utility;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder> {
+public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder> implements Filterable {
 
     private List<OrderMaster> list;
+    private List<OrderMaster> orig;
     private Activity context;
 
     public ToDoAdapter(List<OrderMaster> list, Activity context) {
@@ -113,10 +117,41 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
 
     }
 
+    public Filter getFilter() {
+        return new Filter() {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final ArrayList<OrderMaster> results = new ArrayList<OrderMaster>();
+                if (orig == null)
+                    orig = list;
+                if (constraint != null) {
+                    if (orig != null && orig.size() > 0) {
+                        for (final OrderMaster g : orig) {
+                            if (g.getCustomer_id() != null && g.getCustomer_id().getCustName() != null && g.getCustomer_id().getCustName().toLowerCase() != null && g.getCustomer_id().getCustName().toLowerCase().contains(constraint.toString())) {
+                                results.add(g);
+                            } else if (g.getTitle() != null && g.getTitle().toLowerCase() != null && g.getTitle().toLowerCase().contains(constraint.toString())) {
+                                results.add(g);
+                            }
+                        }
+                    }
+                    oReturn.values = results;
+                }
+                return oReturn;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                list = (ArrayList<OrderMaster>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     public void updateCustomerList(List<OrderMaster> todo) {
         //setUsers(customers);
-        this.list = todo;
+        list = todo;
         notifyDataSetChanged();
     }
 
