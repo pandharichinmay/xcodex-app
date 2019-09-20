@@ -34,8 +34,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDrawer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
+public class AllOrdersActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private RecyclerView assignedOrders;
     private ToDoAdapter adapter;
     private UserMaster currentUser;
@@ -49,51 +48,39 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_drawer);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+     super.onCreate(savedInstanceState);
+    setContentView(R.layout.all_orders_activity);
+       // DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        //NavigationView navigationView = findViewById(R.id.nav_view);
+ //       ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,  R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         System.out.println("In Order Listener..");
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
+//        navigationView.setNavigationItemSelectedListener(this);
         currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
 
         //Setup profile
-        name = navigationView.getHeaderView(0).findViewById(R.id.profileName);
-        name.setText(currentUser.getUsername());
-        subText = navigationView.findViewById(R.id.profileSubText);
-        //TODO subText.setText(currentUser.g);
+//        name = navigationView.getHeaderView(0).findViewById(R.id.profileName);
+//        name.setText(currentUser.getUsername());
+//        subText = navigationView.findViewById(R.id.profileSubText);
+//        //TODO subText.setText(currentUser.g);
 
 
-        assignedOrders = drawer.findViewById(R.id.assigned_orders1);
-        assignedOrders.setLayoutManager(new LinearLayoutManager(this));
+   //     assignedOrders = drawer.findViewById(R.id.assigned_orders1);
+//        assignedOrders.setLayoutManager(new LinearLayoutManager(this));
 
-        addOrder = drawer.findViewById(R.id.btnAddOrder);
-        addOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("In On Click Listener..");
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                startActivity(new Intent(UserDrawer.this, AddOrder.class));
-            }
-        });
+     //   addOrder = drawer.findViewById(R.id.btnAddOrder);
+//        addOrder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                System.out.println("In On Click Listener..");
+//                loadingProgressBar.setVisibility(View.VISIBLE);
+//                startActivity(new Intent(AllOrdersActivity.this, AddOrder.class));
+//            }
+//        });
 
-        loadingProgressBar = drawer.findViewById(R.id.loadingAssignedOrders1);
-        mSearchView = (SearchView) findViewById(R.id.searchView);
+        loadingProgressBar = findViewById(R.id.loadingAssignedOrders1);
+        mSearchView = (SearchView) findViewById(R.id.searchView2);
 
         setupSearchView();
         loadAssignedOrders();
@@ -134,7 +121,7 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         Long assignedTo = currentUser.getIdUser();
         System.out.println("In Load Assigned order..");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getOrdersbyAssignTo/" + assignedTo, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "getAllOrdersBySearch/", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 loadingProgressBar.setVisibility(View.GONE);
@@ -150,10 +137,10 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
                     List<OrderMaster> orders = Utility.fromJson(response, null, listType);
                     if (orders != null && orders.size() > 0) {
 
-                        adapter = new ToDoAdapter(orders, UserDrawer.this);
+                        adapter = new ToDoAdapter(orders, AllOrdersActivity.this);
                         //recyclerView.setHasFixedSize(true);
                         //recyclerView.setItemViewCacheSize(50);
-                        assignedOrders.setAdapter(adapter);
+                        //assignedOrders.setAdapter(adapter);
                     }
 
                 } catch (Exception e) {

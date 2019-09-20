@@ -26,8 +26,8 @@ import java.util.List;
 public class Utility {
     //public static final String HOST_URL = "http://332cc3ad.ngrok.io/";
 
-    public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
-    //public static final String HOST_URL = "http://192.168.0.107:8080/";
+   // public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
+    public static final String HOST_URL = "http://192.168.1.29:8080/";
     //public static final String PHP_URL = "http://192.168.0.107/codex/views/php_services/";
     public static final String PHP_URL = "http://xcodex.in/views/php_services/";
 
