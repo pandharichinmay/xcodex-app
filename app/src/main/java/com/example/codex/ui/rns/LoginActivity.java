@@ -28,7 +28,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.codex.R;
 import com.example.codex.UserDrawer;
-import com.example.codex.model.bo.DeviceMaster;
 import com.example.codex.model.bo.UserMaster;
 import com.example.codex.util.Utility;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -50,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (currentUser != null && currentUser.getUsername() != null) {
             //Send token to Server
-            sendTokenToServer(currentUser);
+            Utility.sendTokenToServer(currentUser, LoginActivity.this);
             //redirect to homepage as already logged in user
             startActivity(new Intent(LoginActivity.this, UserDrawer.class));
             //finishActivity(0);
@@ -143,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                         System.out.println("Login Successful ==>" + user.getUsername());
                         Utility.saveToSharedPref(LoginActivity.this, "user", user);
                         //Send token to Server
-                        sendTokenToServer(user);
+                        Utility.sendTokenToServer(user, LoginActivity.this);
                         startActivity(new Intent(LoginActivity.this, UserDrawer.class));
 
                     }
@@ -195,44 +194,6 @@ public class LoginActivity extends AppCompatActivity {
                 queue.add(stringRequest);
             }
         });
-    }
-
-    private void sendTokenToServer(final UserMaster currentUser) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.HOST_URL + "addDevice", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-            }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
-                return params;
-            }
-
-            @Override
-            public byte[] getBody() throws AuthFailureError {
-                DeviceMaster device = new DeviceMaster();
-                UserMaster user = new UserMaster();
-                user.setIdUser(currentUser.getIdUser());
-                device.setDeviceId(getToken());
-                device.setIdUser(user);
-                String str = new Gson().toJson(device);
-                return str.getBytes();
-            }
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-        queue.add(stringRequest);
     }
 
 

@@ -11,10 +11,10 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <SearchView
+        <!--<SearchView
             android:id="@+id/searchView"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent">-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -22,9 +22,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </SearchView>
+       <!-- </SearchView>-->
 
-    </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>-
 
     <include layout="@layout/content_user_drawer" />
 

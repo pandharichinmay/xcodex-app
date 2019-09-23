@@ -5,18 +5,19 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -44,8 +45,9 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
 
     private TextView name;
     private TextView subText;
-    private SearchView mSearchView;
+    private android.support.v7.widget.SearchView mSearchView;
     private ArrayList<OrderMaster> employeeArrayList;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
 //            }
 //        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         System.out.println("In Order Listener..");
         drawer.addDrawerListener(toggle);
@@ -93,29 +95,37 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         });
 
         loadingProgressBar = drawer.findViewById(R.id.loadingAssignedOrders1);
-        mSearchView = (SearchView) findViewById(R.id.searchView);
+        //mSearchView = (SearchView) findViewById(R.id.searchView);
 
-        setupSearchView();
+        //setupSearchView();
+        loadProfile();
         loadAssignedOrders();
 
+        setupProfileView();
 
+    }
+
+    private void setupProfileView() {
+        if (currentUser.getRole_id() == null || currentUser.getRole_id() != 1) {
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.all_orders).setVisible(false);
+        }
     }
 
     private void setupSearchView() {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(String s) {
                 if (adapter != null) {
-                    adapter.getFilter().filter(query);
+                    adapter.getFilter().filter(s);
                 }
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String s) {
                 if (adapter != null) {
-                    adapter.getFilter().filter(newText);
+                    adapter.getFilter().filter(s);
                 }
                 return false;
             }
@@ -168,6 +178,38 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
         requestQueue.add(stringRequest);
     }
 
+    private void loadProfile() {
+        Long assignedTo = currentUser.getIdUser();
+        System.out.println("In Load Profile..");
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Utility.HOST_URL + "loadProfile/" + assignedTo, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //loadingProgressBar.setVisibility(View.GONE);
+                try {
+                    System.out.println("In Try..");
+
+                    UserMaster user = Utility.fromJson(response, UserMaster.class, null);
+                    if (user != null) {
+                        currentUser = user;
+                        Utility.saveToSharedPref(UserDrawer.this, "user", user);
+                        //Send token to Server
+                        Utility.sendTokenToServer(user, UserDrawer.this);
+                        setupProfileView();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, null);
+
+        // request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        requestQueue.add(stringRequest);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -182,6 +224,16 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.user_drawer, menu);
+
+        getMenuInflater().inflate(R.menu.search, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        mSearchView = new android.support.v7.widget.SearchView(getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        //((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(getResources().getColor(R.color.md_black_1000));
+        MenuItemCompat.setActionView(item, mSearchView);
+
+
+        setupSearchView();
         return true;
     }
 
@@ -210,9 +262,11 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
             // Handle the camera action
 
 
-        } /*else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.all_orders) {
 
-        } else if (id == R.id.nav_slideshow) {
+            startActivity(new Intent(this, AllOrdersActivity.class));
+
+        } /*else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_tools) {
 

@@ -3,15 +3,22 @@ package com.example.codex.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.codex.model.bo.CategoryMaster;
 import com.example.codex.model.bo.CustomerMaster;
 import com.example.codex.model.bo.DepartmentMaster;
+import com.example.codex.model.bo.DeviceMaster;
 import com.example.codex.model.bo.OrderStatusMaster;
 import com.example.codex.model.bo.OrderTypeMaster;
 import com.example.codex.model.bo.PriorityMaster;
@@ -21,15 +28,19 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.example.codex.ui.rns.LoginActivity.getToken;
 
 public class Utility {
     //public static final String HOST_URL = "http://332cc3ad.ngrok.io/";
 
-   // public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
-    public static final String HOST_URL = "http://192.168.1.29:8080/";
-    //public static final String PHP_URL = "http://192.168.0.107/codex/views/php_services/";
-    public static final String PHP_URL = "http://xcodex.in/views/php_services/";
+    // public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
+    public static final String HOST_URL = "http://192.168.0.104:8080/";
+    public static final String PHP_URL = "http://192.168.0.104/codex/views/php_services/";
+    //public static final String PHP_URL = "http://xcodex.in/views/php_services/";
 
     public static final String ORDER_KEY = "order";
     private static final String PREF_NAME = "codexPrefs";
@@ -179,5 +190,51 @@ public class Utility {
         }
 
         return 0;
+    }
+
+    public static void setActionBar(String title, ActionBar actionBar) {
+        //actionBar.setCustomView(R.layout.layout_app_bar);
+        //actionBar.setTitle("My Products");
+        actionBar.setTitle(title);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setElevation(0);
+    }
+
+    public static void sendTokenToServer(final UserMaster currentUser, Context ctx) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.HOST_URL + "addDevice", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                return params;
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                DeviceMaster device = new DeviceMaster();
+                UserMaster user = new UserMaster();
+                user.setIdUser(currentUser.getIdUser());
+                device.setDeviceId(getToken());
+                device.setIdUser(user);
+                String str = new Gson().toJson(device);
+                return str.getBytes();
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        queue.add(stringRequest);
     }
 }

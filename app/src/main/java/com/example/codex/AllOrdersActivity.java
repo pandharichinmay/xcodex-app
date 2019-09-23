@@ -1,22 +1,20 @@
 package com.example.codex;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -35,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AllOrdersActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private RecyclerView assignedOrders;
+    private RecyclerView allOrders;
     private ToDoAdapter adapter;
     private UserMaster currentUser;
     private FloatingActionButton addOrder;
@@ -43,16 +41,16 @@ public class AllOrdersActivity extends AppCompatActivity implements NavigationVi
 
     private TextView name;
     private TextView subText;
-    private SearchView mSearchView;
+    private android.support.v7.widget.SearchView mSearchView;
     private ArrayList<OrderMaster> employeeArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-     super.onCreate(savedInstanceState);
-    setContentView(R.layout.all_orders_activity);
-       // DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.all_orders_activity);
+        // DrawerLayout drawer = findViewById(R.id.drawer_layout);
         //NavigationView navigationView = findViewById(R.id.nav_view);
- //       ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,  R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //       ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,  R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         System.out.println("In Order Listener..");
 //        drawer.addDrawerListener(toggle);
 //        toggle.syncState();
@@ -66,10 +64,10 @@ public class AllOrdersActivity extends AppCompatActivity implements NavigationVi
 //        //TODO subText.setText(currentUser.g);
 
 
-   //     assignedOrders = drawer.findViewById(R.id.assigned_orders1);
-//        assignedOrders.setLayoutManager(new LinearLayoutManager(this));
+        //     allOrders = drawer.findViewById(R.id.assigned_orders1);
+//        allOrders.setLayoutManager(new LinearLayoutManager(this));
 
-     //   addOrder = drawer.findViewById(R.id.btnAddOrder);
+        //   addOrder = drawer.findViewById(R.id.btnAddOrder);
 //        addOrder.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -80,29 +78,32 @@ public class AllOrdersActivity extends AppCompatActivity implements NavigationVi
 //        });
 
         loadingProgressBar = findViewById(R.id.loadingAssignedOrders1);
-        mSearchView = (SearchView) findViewById(R.id.searchView2);
+        //mSearchView = (SearchView) findViewById(R.id.searchView2);
+        allOrders = findViewById(R.id.all_orders);
 
-        setupSearchView();
-        loadAssignedOrders();
+        Utility.setActionBar("All orders", getSupportActionBar());
+
+        //getActionBar().setHomeButtonEnabled(true);
+        //setupSearchView();
+        loadAllOrders();
 
 
     }
 
     private void setupSearchView() {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(String s) {
                 if (adapter != null) {
-                    adapter.getFilter().filter(query);
+                    adapter.getFilter().filter(s);
                 }
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String s) {
                 if (adapter != null) {
-                    adapter.getFilter().filter(newText);
+                    adapter.getFilter().filter(s);
                 }
                 return false;
             }
@@ -114,10 +115,10 @@ public class AllOrdersActivity extends AppCompatActivity implements NavigationVi
         super.onResume();
         System.out.println("In OnResume..");
 
-        loadAssignedOrders();
+        loadAllOrders();
     }
 
-    private void loadAssignedOrders() {
+    private void loadAllOrders() {
         Long assignedTo = currentUser.getIdUser();
         System.out.println("In Load Assigned order..");
 
@@ -138,9 +139,8 @@ public class AllOrdersActivity extends AppCompatActivity implements NavigationVi
                     if (orders != null && orders.size() > 0) {
 
                         adapter = new ToDoAdapter(orders, AllOrdersActivity.this);
-                        //recyclerView.setHasFixedSize(true);
-                        //recyclerView.setItemViewCacheSize(50);
-                        //assignedOrders.setAdapter(adapter);
+                        allOrders.setLayoutManager(new LinearLayoutManager(AllOrdersActivity.this));
+                        allOrders.setAdapter(adapter);
                     }
 
                 } catch (Exception e) {
@@ -155,20 +155,24 @@ public class AllOrdersActivity extends AppCompatActivity implements NavigationVi
         requestQueue.add(stringRequest);
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.user_drawer, menu);
+        //getMenuInflater().inflate(R.menu.user_drawer, menu);
+        getMenuInflater().inflate(R.menu.search, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        mSearchView = new android.support.v7.widget.SearchView(getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        //((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(getResources().getColor(R.color.md_black_1000));
+        MenuItemCompat.setActionView(item, mSearchView);
+
+
+        setupSearchView();
         return true;
     }
 
@@ -180,8 +184,14 @@ public class AllOrdersActivity extends AppCompatActivity implements NavigationVi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
+        }*/
+
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -213,4 +223,6 @@ public class AllOrdersActivity extends AppCompatActivity implements NavigationVi
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
