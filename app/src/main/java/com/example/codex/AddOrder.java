@@ -1,19 +1,26 @@
 package com.example.codex;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -53,12 +60,12 @@ public class AddOrder extends AppCompatActivity {
     private static ProgressDialog mProgressDialog;
     private ArrayList<CustomerMaster> goodModelArrayList;
     private ArrayList<String> names = new ArrayList<String>();
-    private Spinner customerSpinner;
+    private AutoCompleteTextView customerSpinner;
     private Spinner departmentSpinner;
     private Spinner typeSpinner;
     private Spinner categorySpinner;
-    private Spinner productSpinner;
-    private Spinner assignToSpinner;
+    private AutoCompleteTextView productSpinner;
+    private AutoCompleteTextView assignToSpinner;
     private Spinner prioritySpinner;
     private Spinner statusSpinner;
     private RecyclerView productsRecyclerView;
@@ -68,6 +75,10 @@ public class AddOrder extends AppCompatActivity {
     private Button saveOrder;
     private EditText orderTitle;
     private OrderMaster currentOrder;
+    private static final String TAG = "AddOrder";
+
+    Button dateButton, timeButton;
+    TextView dateTextView, timeTextView;
 
     //Response Lists
     private List<ProductMaster> products = new ArrayList<>();
@@ -79,23 +90,58 @@ public class AddOrder extends AppCompatActivity {
     private List<CustomerMaster> customers = new ArrayList<>();
     private List<PriorityMaster> priorities = new ArrayList<>();
     private UserMaster currentUser;
+    private CustomerMaster selectedCustomer;
+    private UserMaster selectedAssignTo;
+    private ProductMaster selectedProduct;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_order);
 
+       /* CalendarView calendarView = findViewById(R.id.calendarView);
+        if (calendarView != null) {
+            calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                    // Note that months are indexed from 0. So, 0 means January, 1 means february, 2 means march etc.
+                    String msg = "Selected date is " + dayOfMonth + "/" + (month + 1) + "/" + year;
+                    Toast.makeText(AddOrder.this, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }*/
+
+        dateButton = findViewById(R.id.dateButton);
+        timeButton = findViewById(R.id.timeButton);
+        dateTextView = findViewById(R.id.dateTextView);
+        timeTextView = findViewById(R.id.timeTextView);
+
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleDateButton();
+            }
+        });
+        timeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleTimeButton();
+            }
+        });
+
+
         currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
 
         String orderJson = getIntent().getStringExtra(Utility.ORDER_KEY);
         currentOrder = Utility.fromJson(orderJson, OrderMaster.class, null);
 
-        customerSpinner = findViewById(R.id.spinnerCustomer);
+        customerSpinner = findViewById(R.id.autoCompleteCustomer);
         departmentSpinner = findViewById(R.id.spinnerDepartment);
         typeSpinner = findViewById(R.id.spinnerType);
         categorySpinner = findViewById(R.id.spinnerCategory);
-        productSpinner = findViewById(R.id.spinnerProduct);
-        assignToSpinner = findViewById(R.id.spinnerAssignTo);
+        productSpinner = findViewById(R.id.autoCompleteProduct);
+        assignToSpinner = findViewById(R.id.autoCompleteAssignTo);
         prioritySpinner = findViewById(R.id.spinnerPriority);
         statusSpinner = findViewById(R.id.spinnerStatus);
         quantity = findViewById(R.id.productQuantity);
@@ -118,9 +164,13 @@ public class AddOrder extends AppCompatActivity {
             public void onClick(View view) {
 
                 OrderProductMapping map = new OrderProductMapping();
-                ProductMaster prod = products.get(productSpinner.getSelectedItemPosition());
-                if (prod != null) {
-                    map.setProduct_id(prod);
+                //selectedProduct = products.get(position);
+             /*  prod = selectedProduct;
+               prod should be taken from field variable
+               field variable will be assgned in itemclicklistener of product spinner/autocomplete
+*/
+                if (selectedProduct != null) {
+                    map.setProduct_id(selectedProduct);
                     map.setQuantity(Utility.parseInteger(quantity));
                     System.out.println("Prod quantity => " + map.getQuantity() + " == " + quantity.getText());
                     if (addProductAdapter == null) {
@@ -153,7 +203,80 @@ public class AddOrder extends AppCompatActivity {
             Utility.setActionBar("Create order", getSupportActionBar());
         }
 
+        customerSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedCustomer = customers.get(position);
+                if (selectedCustomer != null) {
+                    Toast.makeText(AddOrder.this, "Customer selected .. " + selectedCustomer.getCustName(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        assignToSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedAssignTo = users.get(position);
+                if (selectedAssignTo != null) {
+                    //   Toast.makeText(AddOrder.this, "Assign selected .. " + selectedAssignTo.getIdUser(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        productSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedProduct = products.get(position);
+            }
+        });
+
     }
+
+    private void handleDateButton() {
+        Calendar calendar = Calendar.getInstance();
+        int YEAR = calendar.get(Calendar.YEAR);
+        int MONTH = calendar.get(Calendar.MONTH);
+        int DATE = calendar.get(Calendar.DATE);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.set(Calendar.YEAR, year);
+                calendar1.set(Calendar.MONTH, month);
+                calendar1.set(Calendar.DATE, date);
+                String dateText = DateFormat.format("EEEE, MMM d, yyyy", calendar1).toString();
+
+                dateTextView.setText(dateText);
+            }
+        }, YEAR, MONTH, DATE);
+
+        datePickerDialog.show();
+    }
+
+    private void handleTimeButton() {
+        Calendar calendar = Calendar.getInstance();
+        int HOUR = calendar.get(Calendar.HOUR);
+        int MINUTE = calendar.get(Calendar.MINUTE);
+        boolean is24HourFormat = DateFormat.is24HourFormat(this);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                Log.i(TAG, "onTimeSet: " + hour + minute);
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.set(Calendar.HOUR, hour);
+                calendar1.set(Calendar.MINUTE, minute);
+                String dateText = DateFormat.format("h:mm a", calendar1).toString();
+                timeTextView.setText(dateText);
+            }
+        }, HOUR, MINUTE, is24HourFormat);
+
+        timePickerDialog.show();
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -195,9 +318,15 @@ public class AddOrder extends AppCompatActivity {
             request.setId(currentOrder.getIdOrder());
             method = "update_order_service.php";
         }
-        request.setAssign_to(users.get(assignToSpinner.getSelectedItemPosition()).getIdUser());
+
+        if (selectedAssignTo != null) {
+            request.setAssign_to(selectedAssignTo.getIdUser());
+        }
         request.setCategory(categories.get(categorySpinner.getSelectedItemPosition()).getIdCategory());
-        request.setCustomer_id(customers.get(customerSpinner.getSelectedItemPosition()).getIdCustomer());
+        if (selectedCustomer != null) {
+            request.setCustomer_id(selectedCustomer.getIdCustomer());
+        }
+
         request.setDepartmentid(departments.get(departmentSpinner.getSelectedItemPosition()).getIdDept());
         request.setPriority(priorities.get(prioritySpinner.getSelectedItemPosition()).getIdPriority());
         request.setStatus(statuses.get(statusSpinner.getSelectedItemPosition()).getIdOrderstatus());
