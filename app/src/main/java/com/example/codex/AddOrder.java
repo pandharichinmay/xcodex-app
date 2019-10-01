@@ -130,6 +130,11 @@ public class AddOrder extends AppCompatActivity {
             }
         });
 
+       /* String dt;
+        Date cal = (Date) Calendar.getInstance().getTime();
+        dt = cal.toLocaleString();
+        dateTextView.setText(dt.toString());*/
+
 
         currentUser = (UserMaster) Utility.readFromSharedPref(this, "user", UserMaster.class);
 
@@ -208,7 +213,7 @@ public class AddOrder extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedCustomer = customers.get(position);
                 if (selectedCustomer != null) {
-                    Toast.makeText(AddOrder.this, "Customer selected .. " + selectedCustomer.getCustName(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(AddOrder.this, "Customer selected .. " + selectedCustomer.getCustName(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -236,7 +241,7 @@ public class AddOrder extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int YEAR = calendar.get(Calendar.YEAR);
         int MONTH = calendar.get(Calendar.MONTH);
-        int DATE = calendar.get(Calendar.DATE);
+        final int DATE = calendar.get(Calendar.DATE);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -246,11 +251,14 @@ public class AddOrder extends AppCompatActivity {
                 calendar1.set(Calendar.YEAR, year);
                 calendar1.set(Calendar.MONTH, month);
                 calendar1.set(Calendar.DATE, date);
-                String dateText = DateFormat.format("EEEE, MMM d, yyyy", calendar1).toString();
+                String dateText = DateFormat.format("dd/MM/yyyy", calendar1).toString();
 
                 dateTextView.setText(dateText);
+                //Toast.makeText(getApplicationContext(), calendar1.toString(), Toast.LENGTH_SHORT).show();
+                //System.out.println("Date-->", dateText);
             }
         }, YEAR, MONTH, DATE);
+        // datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis() + (1000 * 24 * 60 * 60));
 
         datePickerDialog.show();
     }
@@ -268,7 +276,7 @@ public class AddOrder extends AppCompatActivity {
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(Calendar.HOUR, hour);
                 calendar1.set(Calendar.MINUTE, minute);
-                String dateText = DateFormat.format("h:mm a", calendar1).toString();
+                String dateText = DateFormat.format("hh:mm:ss a", calendar1).toString();
                 timeTextView.setText(dateText);
             }
         }, HOUR, MINUTE, is24HourFormat);
@@ -326,6 +334,8 @@ public class AddOrder extends AppCompatActivity {
         if (selectedCustomer != null) {
             request.setCustomer_id(selectedCustomer.getIdCustomer());
         }
+        System.out.println(" Date => " + dateTextView.getText().toString());
+        System.out.println(" Time => " + timeTextView.getText().toString());
 
         request.setDepartmentid(departments.get(departmentSpinner.getSelectedItemPosition()).getIdDept());
         request.setPriority(priorities.get(prioritySpinner.getSelectedItemPosition()).getIdPriority());
@@ -342,9 +352,9 @@ public class AddOrder extends AppCompatActivity {
         cal.add(Calendar.DATE, 7);
         request.setStart_date(Utility.convertDate(date, "dd/MM/yyyy"));
         request.setEnd_date(Utility.convertDate(cal.getTime(), "dd/MM/yyyy"));
-        request.setDue_date(Utility.convertDate(cal.getTime(), "dd/MM/yyyy"));
+        request.setDue_date(dateTextView.getText().toString()+ " "+ timeTextView.getText().toString());
         request.setClosure_code("");
-
+        System.out.println(dateTextView);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.PHP_URL + method, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
