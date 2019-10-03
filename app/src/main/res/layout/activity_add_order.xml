@@ -199,6 +199,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recyclerProducts" />
 
+
         <TextView
             android:id="@+id/txtpriorityt"
             android:layout_width="wrap_content"
@@ -208,8 +209,7 @@
             android:layout_marginTop="18dp"
             android:text="Priority *"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/autoCompleteAssignTo" />
-
+            app:layout_constraintTop_toBottomOf="@+id/spinnerDepartment" />
 
         <TextView
             android:id="@+id/txtstatus"
@@ -275,7 +275,7 @@
             android:text="Department"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/autoCompleteCustomer" />
+            app:layout_constraintTop_toBottomOf="@+id/autoCompleteAssignTo" />
 
         <TextView
             android:id="@+id/txtType"
@@ -287,7 +287,7 @@
             android:text="Type "
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerDepartment" />
+            app:layout_constraintTop_toBottomOf="@+id/autoCompleteCustomer" />
 
         <TextView
             android:id="@+id/txtCategory"
@@ -407,7 +407,8 @@
             android:layout_marginLeft="32dp"
             android:text="Date"
             app:layout_constraintBottom_toBottomOf="@+id/textDueDate"
-            app:layout_constraintStart_toEndOf="@+id/textDueDate"
+            app:layout_constraintEnd_toEndOf="@+id/dateButton"
+            app:layout_constraintStart_toStartOf="@+id/dateButton"
             app:layout_constraintTop_toTopOf="@+id/textDueDate" />
 
         <TextView
@@ -418,7 +419,8 @@
             android:layout_marginLeft="32dp"
             android:text="Time"
             app:layout_constraintBottom_toBottomOf="@+id/dateTextView"
-            app:layout_constraintStart_toEndOf="@+id/dateTextView"
+            app:layout_constraintEnd_toEndOf="@+id/timeButton"
+            app:layout_constraintStart_toStartOf="@+id/timeButton"
             app:layout_constraintTop_toTopOf="@+id/dateTextView" />
 
     </android.support.constraint.ConstraintLayout>

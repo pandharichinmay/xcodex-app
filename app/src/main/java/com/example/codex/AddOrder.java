@@ -222,7 +222,15 @@ public class AddOrder extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedAssignTo = users.get(position);
-                if (selectedAssignTo != null) {
+                if (selectedAssignTo != null ) {
+                    if(selectedAssignTo.getDepartment_id()!=null){
+                        DepartmentMaster selectedDepartment = new DepartmentMaster();
+                        selectedDepartment.setIdDept(selectedAssignTo.getDepartment_id());
+                        int indexOfDepartment = Utility.getIndexFromList(departments, selectedDepartment, "Department");
+                        departmentSpinner.setSelection(indexOfDepartment);
+                        System.out.println("Department:-"+selectedDepartment.getIdDept() );
+                    }
+
                     //   Toast.makeText(AddOrder.this, "Assign selected .. " + selectedAssignTo.getIdUser(), Toast.LENGTH_LONG).show();
                 }
             }
@@ -352,7 +360,7 @@ public class AddOrder extends AppCompatActivity {
         cal.add(Calendar.DATE, 7);
         request.setStart_date(Utility.convertDate(date, "dd/MM/yyyy"));
         request.setEnd_date(Utility.convertDate(cal.getTime(), "dd/MM/yyyy"));
-        request.setDue_date(dateTextView.getText().toString()+ " "+ timeTextView.getText().toString());
+        request.setDue_date(dateTextView.getText().toString() + " " + timeTextView.getText().toString());
         request.setClosure_code("");
         System.out.println(dateTextView);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.PHP_URL + method, new Response.Listener<String>() {
