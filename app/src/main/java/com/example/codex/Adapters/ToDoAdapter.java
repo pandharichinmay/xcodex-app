@@ -69,7 +69,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
     public class RecViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txtpriorityStatus, txtcategoryStatus;
-        private TextView orderTitle, dueDate;
+        private TextView orderTitle, dueDate, timeLeft;
         private TextView status;
         private ImageView editButton;
 
@@ -81,6 +81,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             dueDate = (TextView) itemView.findViewById(R.id.txtDueDate);
             status = (TextView) itemView.findViewById(R.id.btnOrderStatus);
             editButton = (ImageView) itemView.findViewById(R.id.btnEditOrder);
+            timeLeft = (TextView) itemView.findViewById(R.id.textTimeLeft);
         }
 
         private void bind(final OrderMaster todo) {
@@ -91,7 +92,10 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             if (todo.getCategory_id() != null) {
                 txtcategoryStatus.setText(todo.getCategory_id().getCategory());
             }
-
+            System.out.println("TimeLEft :" + todo.getTimeleft()  );
+            if (todo.getTimeleft() != null) {
+                timeLeft.setText(todo.getTimeleft());
+            }
             if (todo.getCustomer_id() != null) {
                 orderTitle.setText(todo.getCustomer_id().getCustName());
             } else {
@@ -129,7 +133,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
                 if (constraint != null) {
                     if (orig != null && orig.size() > 0) {
                         for (final OrderMaster g : orig) {
-                            if (g.getCustomer_id() != null && g.getCustomer_id().getCustName() != null && g.getCustomer_id().getCustName().toLowerCase() != null && g.getCustomer_id().getCustName().toLowerCase().contains(constraint.toString())) {
+                            if (g.getCustomer_id() != null && g.getCustomer_id().getCustName() != null && g.getCustomer_id().getCustName().toLowerCase() != null && g.getTimeleft().toLowerCase() != null && g.getCustomer_id().getCustName().toLowerCase().contains(constraint.toString())) {
                                 results.add(g);
                             } else if (g.getTitle() != null && g.getTitle().toLowerCase() != null && g.getTitle().toLowerCase().contains(constraint.toString())) {
                                 results.add(g);

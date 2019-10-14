@@ -38,8 +38,8 @@ public class Utility {
     //public static final String HOST_URL = "http://332cc3ad.ngrok.io/";
 
     // public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
-    public static final String HOST_URL = "http://192.168.1.26:8080/";
-    public static final String PHP_URL = "http://192.168.1.26/codex/views/php_services/";
+    public static final String HOST_URL = "http://192.168.1.203:8080/";
+    public static final String PHP_URL = "http://192.168.1.203/Repo/codex/views/php_services/";
     //public static final String PHP_URL = "http://xcodex.in/views/php_services/";
 
     public static final String ORDER_KEY = "order";
