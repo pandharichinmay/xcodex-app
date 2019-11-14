@@ -170,7 +170,7 @@ public class UserDrawer extends AppCompatActivity implements NavigationView.OnNa
                     e.printStackTrace();
                 }
             }
-        }, Utility.standardErrorListener(this));
+        }, Utility.standardErrorListener(this, loadingProgressBar));
 
         // request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);

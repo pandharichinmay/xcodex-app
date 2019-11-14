@@ -2,6 +2,8 @@ package com.example.codex.Adapters;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,6 @@ import android.widget.TextView;
 
 import com.example.codex.R;
 import com.example.codex.model.bo.OrderHistoryLog;
-
-import com.example.codex.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,8 +103,23 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         private void bind(final OrderHistoryLog product) {
 
             historyTitle.setText(product.getHistoydescription());
-            historyDescription.setText(product.getComments());
-            historyDate.setText(product.getTimestamp());
+
+            if (product.getNewStatus() != null && product.getNewStatus().getIdOrderstatus() != null) {
+                if (product.getOldStatus() == null || product.getOldStatus().getIdOrderstatus().intValue() != product.getNewStatus().getIdOrderstatus().intValue()) {
+                    historyTitle.setText("Changed to " + product.getNewStatus().getStatus());
+                }
+            }
+
+            if (product.getNewUser() != null && product.getNewUser().getIdUser() != null) {
+                if (product.getOldUser() == null || product.getOldUser().getIdUser().intValue() != product.getNewUser().getIdUser().intValue()) {
+                    historyTitle.setText("Assigned to " + product.getNewUser().getUsername());
+                }
+            }
+
+            historyDescription.setText(Html.fromHtml(product.getComments()));
+            if (product.getTimestamp() != null) {
+                historyDate.setText(DateFormat.format("MMM dd HH:mm", product.getTimestamp()));
+            }
             System.out.println("History Title " + product.getHistoydescription());
         }
 

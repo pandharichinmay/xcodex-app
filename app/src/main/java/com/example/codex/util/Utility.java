@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -22,6 +24,7 @@ import com.example.codex.model.bo.DeviceMaster;
 import com.example.codex.model.bo.OrderStatusMaster;
 import com.example.codex.model.bo.OrderTypeMaster;
 import com.example.codex.model.bo.PriorityMaster;
+import com.example.codex.model.bo.ProductMaster;
 import com.example.codex.model.bo.UserMaster;
 import com.google.gson.Gson;
 
@@ -37,10 +40,10 @@ import static com.example.codex.ui.rns.LoginActivity.getToken;
 public class Utility {
     //public static final String HOST_URL = "http://332cc3ad.ngrok.io/";
 
-    // public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
-    public static final String HOST_URL = "http://192.168.1.203:8080/";
-    public static final String PHP_URL = "http://192.168.1.203/Repo/codex/views/php_services/";
-    //public static final String PHP_URL = "http://xcodex.in/views/php_services/";
+    public static final String HOST_URL = "http://li961-172.members.linode.com:9090/";
+    //public static final String HOST_URL = "http://192.168.0.103:8080/";
+    //public static final String PHP_URL = "http://192.168.0.103/codex/views/php_services/";
+    public static final String PHP_URL = "http://xcodex.in/views/php_services/";
 
     public static final String ORDER_KEY = "order";
     private static final String PREF_NAME = "codexPrefs";
@@ -71,6 +74,20 @@ public class Utility {
                 //displaying the error in toast if occurrs
                 System.out.println("In Error Listener" + error);
                 Toast.makeText(ctx, "Error occurred on the server ..", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+    public static Response.ErrorListener standardErrorListener(final Context ctx, final ProgressBar progressBar) {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //displaying the error in toast if occurrs
+                System.out.println("In Error Listener" + error);
+                Toast.makeText(ctx, "Error occurred on the server ..", Toast.LENGTH_SHORT).show();
+                if(progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         };
     }
@@ -190,6 +207,75 @@ public class Utility {
         }
 
         return 0;
+    }
+
+    public static Object findObjectByName(List list, String val, String type) {
+        if (list == null || list.size() == 0 || val == null) {
+            return 0;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            Object obj = list.get(i);
+            switch (type) {
+                case "User":
+                    UserMaster user = (UserMaster) obj;
+                    if (stringEquals(user.getUsername(), val)) {
+                        return user;
+                    }
+                    break;
+                case "Category":
+                    CategoryMaster cat1 = (CategoryMaster) obj;
+                    if (stringEquals(cat1.getCategory(), val)) {
+                        return cat1;
+                    }
+                    break;
+                case "Department":
+                    DepartmentMaster dept1 = (DepartmentMaster) obj;
+                    if (stringEquals(dept1.getBusinessUnit(), val)) {
+                        return dept1;
+                    }
+                    break;
+                case "Type":
+                    OrderTypeMaster type1 = (OrderTypeMaster) obj;
+                    if (stringEquals(type1.getType(), val)) {
+                        return type1;
+                    }
+                    break;
+                case "Status":
+                    OrderStatusMaster status1 = (OrderStatusMaster) obj;
+                    if (stringEquals(status1.getStatus(), val)) {
+                        return status1;
+                    }
+                    break;
+                case "Customer":
+                    CustomerMaster cust1 = (CustomerMaster) obj;
+                    if (stringEquals(cust1.getCustName(), val)) {
+                        return cust1;
+                    }
+                    break;
+                case "Priority":
+                    PriorityMaster pr1 = (PriorityMaster) obj;
+                    if (stringEquals(pr1.getPriority(), val)) {
+                        return pr1;
+                    }
+                    break;
+
+                case "Product":
+                    ProductMaster pm = (ProductMaster) obj;
+                    if (stringEquals(pm.getProductApplication(), val)) {
+                        return pm;
+                    }
+                    break;
+            }
+        }
+
+        return null;
+    }
+
+    public static boolean stringEquals(String s1, String s2) {
+        if (s1 != null && s2 != null) {
+            return s1.equals(s2);
+        }
+        return false;
     }
 
     public static void setActionBar(String title, ActionBar actionBar) {

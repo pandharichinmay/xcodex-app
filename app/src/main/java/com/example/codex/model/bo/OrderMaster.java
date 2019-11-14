@@ -32,7 +32,7 @@ public class OrderMaster implements Serializable {
     private String active_flag;
     private CustomerMaster customer_id;
     private List<OrderProductMapping> products;
-    private transient String timeleft;
+    private String timeleft;
 
     public Long getIdOrder() {
         return idOrder;

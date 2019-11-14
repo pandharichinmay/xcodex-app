@@ -1,10 +1,12 @@
 package com.example.codex;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,7 @@ public class FragmentDetails extends Fragment {
     private EditText productTitle;
     private OrderMaster currentOrder;
     private ProgressBar progress;
+    private TextView dueDate;
 
     public FragmentDetails() {
         //this.currentOrder = order;
@@ -57,7 +60,7 @@ public class FragmentDetails extends Fragment {
         txtOrderTitle = view.findViewById(R.id.txtOrderTitle);
         progress = view.findViewById(R.id.loadingOrderDetails);
         txtRemark = view.findViewById(R.id.txtRemark);
-
+        dueDate = view.findViewById(R.id.etDueDate);
 //        txtQuantity = view.findViewById(R.id.txtQuantity);
 //        textViewProduct = view.findViewById(R.id.textViewProduct);
 
@@ -124,6 +127,19 @@ public class FragmentDetails extends Fragment {
 
                     if (orderMasters.getOrderCreated_by() != null) {
                         txtAdminSubmitter.setText(orderMasters.getOrderCreated_by().getUsername());
+                    }
+
+                    if (orderMasters.getDue_date() != null) {
+                        dueDate.setText(DateFormat.format("MMM dd HH:mm", orderMasters.getDue_date()).toString());
+                        if(orderMasters.getTimeleft() != null) {
+                            if (orderMasters.getTimeleft().contains("Overdue")) {
+                                dueDate.setTextColor(Color.parseColor("red"));
+                            } else if (orderMasters.getTimeleft().contains("minutes") || orderMasters.getTimeleft().contains("seconds")) {
+                                dueDate.setTextColor(Color.parseColor("#ffa500"));
+                            }
+                        }
+                    } else {
+                        dueDate.setText("NA");
                     }
 
 //                        if (orderMasters.getProducts() != null) {

@@ -69,19 +69,21 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
     public class RecViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txtpriorityStatus, txtcategoryStatus;
-        private TextView orderTitle, dueDate, timeLeft;
+        private TextView orderTitle, /*dueDate*/
+                timeLeft;
         private TextView status;
-        private ImageView editButton;
+        private ImageView editButton, clock;
 
         public RecViewHolder(View itemView) {
             super(itemView);
             txtpriorityStatus = (TextView) itemView.findViewById(R.id.txtOrderPriority);
             txtcategoryStatus = (TextView) itemView.findViewById(R.id.txtOrderCategory);
             orderTitle = (TextView) itemView.findViewById(R.id.txtOrderTitle);
-            dueDate = (TextView) itemView.findViewById(R.id.txtDueDate);
+            //dueDate = (TextView) itemView.findViewById(R.id.txtDueDate);
             status = (TextView) itemView.findViewById(R.id.btnOrderStatus);
             editButton = (ImageView) itemView.findViewById(R.id.btnEditOrder);
             timeLeft = (TextView) itemView.findViewById(R.id.textTimeLeft);
+            clock = (ImageView) itemView.findViewById(R.id.clock);
         }
 
         private void bind(final OrderMaster todo) {
@@ -92,10 +94,20 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             if (todo.getCategory_id() != null) {
                 txtcategoryStatus.setText(todo.getCategory_id().getCategory());
             }
-            System.out.println("TimeLEft :" + todo.getTimeleft()  );
+            System.out.println("TimeLEft :" + todo.getTimeleft());
             if (todo.getTimeleft() != null) {
                 timeLeft.setText(todo.getTimeleft());
+                if (todo.getTimeleft().contains("Overdue")) {
+                    clock.setImageResource(R.drawable.ic_time_overdue);
+                } else if (todo.getTimeleft().contains("minutes") || todo.getTimeleft().contains("seconds")) {
+                    clock.setImageResource(R.drawable.ic_time_almost_overdue);
+                }
+            } else {
+                clock.setVisibility(View.GONE);
+                timeLeft.setVisibility(View.GONE);
             }
+
+
             if (todo.getCustomer_id() != null) {
                 orderTitle.setText(todo.getCustomer_id().getCustName());
             } else {
@@ -103,7 +115,8 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             }
 
 
-            dueDate.setText(Utility.convertDate(todo.getDue_date(), Utility.DATE_FORMAT));
+            //dueDate.setText(Utility.convertDate(todo.getDue_date(), Utility.DATE_FORMAT));
+
             if (todo.getStatus_id() != null) {
                 status.setText(todo.getStatus_id().getStatus());
             }
@@ -128,12 +141,11 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             protected FilterResults performFiltering(CharSequence constraint) {
                 final FilterResults oReturn = new FilterResults();
                 final ArrayList<OrderMaster> results = new ArrayList<OrderMaster>();
-                if (orig == null)
-                    orig = list;
+                if (orig == null) orig = list;
                 if (constraint != null) {
                     if (orig != null && orig.size() > 0) {
                         for (final OrderMaster g : orig) {
-                            if (g.getCustomer_id() != null && g.getCustomer_id().getCustName() != null && g.getCustomer_id().getCustName().toLowerCase() != null && g.getTimeleft().toLowerCase() != null && g.getCustomer_id().getCustName().toLowerCase().contains(constraint.toString())) {
+                            if (g.getCustomer_id() != null && g.getCustomer_id().getCustName() != null && g.getCustomer_id().getCustName().toLowerCase() != null && g.getCustomer_id().getCustName().toLowerCase().contains(constraint.toString())) {
                                 results.add(g);
                             } else if (g.getTitle() != null && g.getTitle().toLowerCase() != null && g.getTitle().toLowerCase().contains(constraint.toString())) {
                                 results.add(g);

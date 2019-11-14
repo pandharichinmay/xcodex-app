@@ -1,13 +1,16 @@
 package com.example.codex;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
@@ -77,8 +80,8 @@ public class AddOrder extends AppCompatActivity {
     private OrderMaster currentOrder;
     private static final String TAG = "AddOrder";
 
-    Button dateButton, timeButton;
-    TextView dateTextView, timeTextView;
+    //private Button dateButton, timeButton;
+    private TextView dateTextView, timeTextView;
 
     //Response Lists
     private List<ProductMaster> products = new ArrayList<>();
@@ -93,6 +96,8 @@ public class AddOrder extends AppCompatActivity {
     private CustomerMaster selectedCustomer;
     private UserMaster selectedAssignTo;
     private ProductMaster selectedProduct;
+
+    static String TIME_FORMAT = "HH:mm:ss";
 
 
     @Override
@@ -112,18 +117,18 @@ public class AddOrder extends AppCompatActivity {
             });
         }*/
 
-        dateButton = findViewById(R.id.dateButton);
-        timeButton = findViewById(R.id.timeButton);
+        //dateButton = findViewById(R.id.dateButton);
+        //timeButton = findViewById(R.id.timeButton);
         dateTextView = findViewById(R.id.dateTextView);
         timeTextView = findViewById(R.id.timeTextView);
 
-        dateButton.setOnClickListener(new View.OnClickListener() {
+        dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handleDateButton();
             }
         });
-        timeButton.setOnClickListener(new View.OnClickListener() {
+        timeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handleTimeButton();
@@ -211,24 +216,25 @@ public class AddOrder extends AppCompatActivity {
         customerSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedCustomer = customers.get(position);
+                /*selectedCustomer = customers.get(position);
                 if (selectedCustomer != null) {
                     //Toast.makeText(AddOrder.this, "Customer selected .. " + selectedCustomer.getCustName(), Toast.LENGTH_LONG).show();
-                }
+                }*/
             }
         });
 
         assignToSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedAssignTo = users.get(position);
-                if (selectedAssignTo != null ) {
-                    if(selectedAssignTo.getDepartment_id()!=null){
+                String assignedTo = (String) parent.getItemAtPosition(position);
+                selectedAssignTo = (UserMaster) Utility.findObjectByName(users, assignedTo, "User");
+                if (selectedAssignTo != null) {
+                    if (selectedAssignTo.getDepartment_id() != null) {
                         DepartmentMaster selectedDepartment = new DepartmentMaster();
                         selectedDepartment.setIdDept(selectedAssignTo.getDepartment_id());
                         int indexOfDepartment = Utility.getIndexFromList(departments, selectedDepartment, "Department");
                         departmentSpinner.setSelection(indexOfDepartment);
-                        System.out.println("Department:-"+selectedDepartment.getIdDept() );
+                        System.out.println("Department:-" + selectedDepartment.getIdDept());
                     }
 
                     //   Toast.makeText(AddOrder.this, "Assign selected .. " + selectedAssignTo.getIdUser(), Toast.LENGTH_LONG).show();
@@ -239,14 +245,23 @@ public class AddOrder extends AppCompatActivity {
         productSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedProduct = products.get(position);
+                String selectedProductName = (String) parent.getItemAtPosition(position);
+                selectedProduct = (ProductMaster) Utility.findObjectByName(products, selectedProductName, "Product");
+                //Log.d("ProductSelection", "Selected product is " + selectedProduct.getProductApplication() + " position " + position + " id " + id);
             }
         });
+
 
     }
 
     private void handleDateButton() {
+
+        orderTitle.clearFocus();
+
         Calendar calendar = Calendar.getInstance();
+        if (currentOrder != null && currentOrder.getDue_date() != null) {
+            calendar.setTime(currentOrder.getDue_date());
+        }
         int YEAR = calendar.get(Calendar.YEAR);
         int MONTH = calendar.get(Calendar.MONTH);
         final int DATE = calendar.get(Calendar.DATE);
@@ -261,7 +276,9 @@ public class AddOrder extends AppCompatActivity {
                 calendar1.set(Calendar.DATE, date);
                 String dateText = DateFormat.format("dd/MM/yyyy", calendar1).toString();
 
+                //dateTextView.requestFocus();
                 dateTextView.setText(dateText);
+                //dateTextView.setfocus
                 //Toast.makeText(getApplicationContext(), calendar1.toString(), Toast.LENGTH_SHORT).show();
                 //System.out.println("Date-->", dateText);
             }
@@ -272,22 +289,30 @@ public class AddOrder extends AppCompatActivity {
     }
 
     private void handleTimeButton() {
+
+
         Calendar calendar = Calendar.getInstance();
-        int HOUR = calendar.get(Calendar.HOUR);
+
+        if (currentOrder != null && currentOrder.getDue_date() != null) {
+            calendar.setTime(currentOrder.getDue_date());
+        }
+        int HOUR = calendar.get(Calendar.HOUR_OF_DAY);
         int MINUTE = calendar.get(Calendar.MINUTE);
-        boolean is24HourFormat = DateFormat.is24HourFormat(this);
+        //boolean is24HourFormat = DateFormat.is24HourFormat(this);
+
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 Log.i(TAG, "onTimeSet: " + hour + minute);
                 Calendar calendar1 = Calendar.getInstance();
-                calendar1.set(Calendar.HOUR, hour);
+                calendar1.set(Calendar.HOUR_OF_DAY, hour);
                 calendar1.set(Calendar.MINUTE, minute);
-                String dateText = DateFormat.format("hh:mm:ss a", calendar1).toString();
+                String dateText = DateFormat.format(TIME_FORMAT, calendar1).toString();
                 timeTextView.setText(dateText);
+                //timeTextView.requestFocus();
             }
-        }, HOUR, MINUTE, is24HourFormat);
+        }, HOUR, MINUTE, true);
 
         timePickerDialog.show();
 
@@ -318,12 +343,39 @@ public class AddOrder extends AppCompatActivity {
     private void setOrderDetails() {
         if (currentOrder == null) {
             System.out.println("New Order ..");
+            selectedAssignTo = currentUser;
+            assignToSpinner.setText(currentUser.getUsername());
             return;
         }
+        orderTitle.clearFocus();
+        orderTitle.setFocusableInTouchMode(false);
+        orderTitle.setFocusable(false);
+        orderTitle.setFocusableInTouchMode(true);
+        orderTitle.setFocusable(true);
+
         orderTitle.setText(currentOrder.getTitle());
         if (currentOrder.getProducts() != null && currentOrder.getProducts().size() > 0) {
             addProductAdapter.setList(currentOrder.getProducts());
         }
+
+        if (currentOrder.getCustomer_id() != null) {
+            customerSpinner.setText(currentOrder.getCustomer_id().getCustName());
+            selectedCustomer = currentOrder.getCustomer_id();
+        }
+
+        if (currentOrder.getAssignedTo() != null) {
+            assignToSpinner.setText(currentOrder.getAssignedTo().getUsername());
+            selectedAssignTo = currentOrder.getAssignedTo();
+        }
+
+        if (currentOrder != null && currentOrder.getDue_date() != null) {
+            dateTextView.setText(DateFormat.format("dd/MM/yyyy", currentOrder.getDue_date()).toString());
+        }
+
+        if (currentOrder != null && currentOrder.getDue_date() != null) {
+            timeTextView.setText(DateFormat.format(TIME_FORMAT, currentOrder.getDue_date()).toString());
+        }
+
 
     }
 
@@ -337,11 +389,32 @@ public class AddOrder extends AppCompatActivity {
 
         if (selectedAssignTo != null) {
             request.setAssign_to(selectedAssignTo.getIdUser());
+        } else {
+            assignToSpinner.setError("Please select a valid user");
+            assignToSpinner.setFocusable(true);
+            assignToSpinner.requestFocus();
+            return;
         }
         request.setCategory(categories.get(categorySpinner.getSelectedItemPosition()).getIdCategory());
-        if (selectedCustomer != null) {
-            request.setCustomer_id(selectedCustomer.getIdCustomer());
+
+        if (!TextUtils.isEmpty(customerSpinner.getText())) {
+            selectedCustomer = (CustomerMaster) Utility.findObjectByName(customers, customerSpinner.getText().toString(), "Customer");
+            if (selectedCustomer != null) {
+                request.setCustomer_id(selectedCustomer.getIdCustomer());
+            } else {
+                customerSpinner.setError("Please select a valid customer");
+                customerSpinner.setFocusable(true);
+                customerSpinner.setFocusableInTouchMode(true);
+                customerSpinner.requestFocus();
+                return;
+            }
+        } else {
+            customerSpinner.setFocusable(true);
+            customerSpinner.requestFocus();
+            customerSpinner.setError("Please select a valid customer");
+            return;
         }
+
         System.out.println(" Date => " + dateTextView.getText().toString());
         System.out.println(" Time => " + timeTextView.getText().toString());
 
@@ -376,10 +449,19 @@ public class AddOrder extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 try {
                     //loadingProgressBar.setVisibility(View.GONE);
-                    System.out.println("Error Message.." + error.getMessage());
+                    System.out.println("Error Message.." + error);
 
-                    Toast.makeText(AddOrder.this, "Some error occurred on the server .. ", Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(AddOrder.this, "Some error occurred on the server .. " + error, Toast.LENGTH_LONG).show();
+                    final AlertDialog alert = new AlertDialog.Builder(AddOrder.this).create();
+                    alert.setMessage("Error on save " + error);
+                    alert.setButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to execute after dialog closed
+                            //Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                            alert.dismiss();
+                        }
+                    });
+                    alert.show();
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(AddOrder.this, "Some error occurred on the server .. ", Toast.LENGTH_LONG).show();
@@ -444,8 +526,8 @@ public class AddOrder extends AppCompatActivity {
                                 names.add(cust.getUsername());
                             }
                         }
-                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
-                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, R.layout.autocomplete_item, R.id.tvAutocompleteListItem, names);
+                        //spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         assignToSpinner.setAdapter(spinnerArrayAdapter);
 
                         if (currentOrder != null) {
@@ -752,13 +834,15 @@ public class AddOrder extends AppCompatActivity {
                                 names.add(cust.getCustName());
                             }
                         }
-                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
-                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+//                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddOrder.this, simple_spinner_item, names);
+                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(AddOrder.this, R.layout.autocomplete_item, R.id.tvAutocompleteListItem, names);
+
+                        //spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         customerSpinner.setAdapter(spinnerArrayAdapter);
 
-                        if (currentOrder != null) {
+                        /*if (currentOrder != null) {
                             customerSpinner.setSelection(Utility.getIndexFromList(customers, currentOrder.getCustomer_id(), "Customer"));
-                        }
+                        }*/
                     }
 
                 } catch (Exception e) {
