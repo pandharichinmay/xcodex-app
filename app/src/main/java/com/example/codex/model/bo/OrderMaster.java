@@ -33,7 +33,7 @@ public class OrderMaster implements Serializable {
     private CustomerMaster customer_id;
     private List<OrderProductMapping> products;
     private String timeleft;
-
+    private String lastUpdatedAt;
     public Long getIdOrder() {
         return idOrder;
     }
@@ -248,5 +248,12 @@ public class OrderMaster implements Serializable {
 
     public void setTimeleft(String timeleft) {
         this.timeleft = timeleft;
+    }
+    public String getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(String lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
     }
 }

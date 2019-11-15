@@ -70,7 +70,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
 
         private TextView txtpriorityStatus, txtcategoryStatus;
         private TextView orderTitle, /*dueDate*/
-                timeLeft;
+                timeLeft,lastUpdatedAt;
         private TextView status;
         private ImageView editButton, clock;
 
@@ -84,6 +84,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             editButton = (ImageView) itemView.findViewById(R.id.btnEditOrder);
             timeLeft = (TextView) itemView.findViewById(R.id.textTimeLeft);
             clock = (ImageView) itemView.findViewById(R.id.clock);
+            lastUpdatedAt = (TextView) itemView.findViewById(R.id.textLastUpdatedAt);
         }
 
         private void bind(final OrderMaster todo) {
@@ -105,6 +106,18 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.RecViewHolder>
             } else {
                 clock.setVisibility(View.GONE);
                 timeLeft.setVisibility(View.GONE);
+            }
+            System.out.println("Last Updated Date :" + todo.getLastUpdatedAt());
+            if (todo.getLastUpdatedAt() != null) {
+                lastUpdatedAt.setText(todo.getLastUpdatedAt());
+                if (todo.getLastUpdatedAt().contains("Overdue")) {
+                    clock.setImageResource(R.drawable.ic_time_overdue);
+                } else if (todo.getLastUpdatedAt().contains("minutes") || todo.getLastUpdatedAt().contains("seconds")) {
+                    clock.setImageResource(R.drawable.ic_time_almost_overdue);
+                }
+            } else {
+                clock.setVisibility(View.GONE);
+                lastUpdatedAt.setVisibility(View.GONE);
             }
 
 
